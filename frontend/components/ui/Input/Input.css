@@ -1,0 +1,25 @@
+.ui-input {
+  display: grid;
+  gap: 0.375rem;
+  font-size: 0.95rem;
+}
+
+.ui-input__label {
+  color: #374151;
+  font-weight: 600;
+}
+
+.ui-input__field {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  background: white;
+  color: #111827;
+}
+
+.ui-input__field:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+}
