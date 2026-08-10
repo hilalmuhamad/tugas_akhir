@@ -26,4 +26,7 @@ api.interceptors.response.use(
   },
 );
 
+/** Ringkasan statistik tracer study untuk landing page (publik). */
+export const getStats = () => api.get('/stats');
+
 export default api;

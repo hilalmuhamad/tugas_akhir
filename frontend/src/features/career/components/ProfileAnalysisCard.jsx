@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react';
+import { prodiLabel } from '../../../utils/prodiLabel';
 
 export default function ProfileAnalysisCard({ analysis }) {
   if (!analysis) return null;
@@ -24,7 +25,7 @@ export default function ProfileAnalysisCard({ analysis }) {
           <div>
             <h2 className="text-lg font-semibold text-slate-900">{nama || 'Kandidat'}</h2>
             {program_studi && (
-              <p className="text-sm text-slate-500">{program_studi}</p>
+              <p className="text-sm text-slate-500">{prodiLabel(program_studi)}</p>
             )}
           </div>
         </div>

@@ -9,6 +9,7 @@ import JobSearchPage from './features/jobs/pages/JobSearchPage.jsx';
 import JobDetailPage from './features/jobs/pages/JobDetailPage.jsx';
 import DashboardPage from './features/dashboard/pages/DashboardPage.jsx';
 import KuisionerPage from './features/dashboard/pages/KuisionerPage.jsx';
+import KuisionerSuccessPage from './features/dashboard/pages/KuisionerSuccessPage.jsx';
 import LaporanPage from './features/dashboard/pages/LaporanPage.jsx';
 
 function App() {
@@ -39,6 +40,14 @@ function App() {
           element={
             <ProtectedRoute>
               <KuisionerPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/kuisioner/sukses"
+          element={
+            <ProtectedRoute>
+              <KuisionerSuccessPage />
             </ProtectedRoute>
           }
         />

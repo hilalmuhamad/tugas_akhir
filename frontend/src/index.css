@@ -1,10 +1,22 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500..700&display=swap");
 @import "tailwindcss";
 
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Source Serif 4", ui-serif, Georgia, "Times New Roman", serif;
+
+  --color-canvas: #f4f3f1;
+  --color-hairline: rgba(15, 23, 42, 0.08);
+
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-lifted: 0 4px 12px rgba(15, 23, 42, 0.08), 0 24px 48px rgba(15, 23, 42, 0.1);
+  --shadow-btn: 0 2px 0 rgba(30, 64, 175, 0.55), 0 6px 16px rgba(37, 99, 235, 0.28);
+  --shadow-btn-hover: 0 3px 0 rgba(30, 64, 175, 0.6), 0 10px 22px rgba(37, 99, 235, 0.32);
+  --shadow-btn-ghost: 0 2px 0 rgba(15, 23, 42, 0.1), 0 6px 16px rgba(15, 23, 42, 0.08);
+  --shadow-btn-ghost-hover: 0 3px 0 rgba(15, 23, 42, 0.12), 0 10px 22px rgba(15, 23, 42, 0.1);
+}
+
 :root {
-  font-family: "Poppins", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
   color: #0f172a;
   background-color: #ffffff;
   font-synthesis: none;
@@ -13,12 +25,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
   min-width: 320px;
   background-color: #ffffff;
   color: #0f172a;
@@ -28,14 +39,14 @@ body {
   min-height: 100vh;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  margin: 0;
+/*
+  Jangan menambahkan reset h1..h6 di sini. Preflight Tailwind sudah melakukannya
+  di dalam @layer base; menulis ulang di luar layer membuat aturannya menang atas
+  utility text-* dan font-* sehingga ukuran judul tidak bisa diatur dari kelas.
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

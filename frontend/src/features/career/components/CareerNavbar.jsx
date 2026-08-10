@@ -105,7 +105,7 @@ export default function CareerNavbar() {
             {hasilBtn('Hasil Analisis')}
             {navLink('/analyze', 'Analisis Karier')}
             {navLink('/jobs', 'Cari Kerja')}
-            {user?.role === 'alumni' && navLink('/kuisioner', 'Isi Kuisioner')}
+            {user?.role !== 'viewer' && navLink('/kuisioner', 'Isi Kuisioner')}
           </nav>
         </div>
 
@@ -149,7 +149,7 @@ export default function CareerNavbar() {
                   label="Riwayat Analisis"
                   onClick={goToRiwayat}
                 />
-                {user?.role === 'alumni' && (
+                {user?.role !== 'viewer' && (
                   <MenuItem
                     icon={<ClipboardList className="h-4 w-4" />}
                     label="Isi Kuisioner"
@@ -175,7 +175,7 @@ export default function CareerNavbar() {
         {hasilBtn('Hasil Analisis')}
         {navLink('/analyze', 'Analisis Karier')}
         {navLink('/jobs', 'Cari Kerja')}
-        {user?.role === 'alumni' && navLink('/kuisioner', 'Isi Kuisioner')}
+        {user?.role !== 'viewer' && navLink('/kuisioner', 'Isi Kuisioner')}
       </nav>
     </header>
   );

@@ -6,6 +6,7 @@
  */
 
 import api from '../../../services/api';
+import { prodiLabel } from '../../../utils/prodiLabel';
 
 export function laporanUnduhUrl() {
   const token = localStorage.getItem('token') || '';
@@ -16,7 +17,7 @@ export function rekapPerProdi(alumni) {
   const map = new Map();
   for (const r of alumni) {
     const key = r.programStudi || 'Umum';
-    const g = map.get(key) ?? { prodi: key, total: 0, bekerja: 0, gaji: [], tunggu: [] };
+    const g = map.get(key) ?? { prodi: prodiLabel(key), total: 0, bekerja: 0, gaji: [], tunggu: [] };
     g.total += 1;
     if (r.statusBekerja === 'Bekerja' || r.statusBekerja === 'Wirausaha') g.bekerja += 1;
     if (r.gajiJuta != null) g.gaji.push(r.gajiJuta);

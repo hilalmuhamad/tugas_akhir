@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
-import { ClipboardList, CheckCircle2, AlertCircle, GraduationCap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ClipboardList, AlertCircle, GraduationCap } from 'lucide-react';
 import { useAuthStore } from '../../auth/store/authStore';
 import api from '../../../services/api';
 import CareerNavbar from '../../career/components/CareerNavbar';
 
-const PROGRAM_STUDI_OPTIONS = ['Sci&Tech', 'Comm&Mgmt', 'Others'];
+const PROGRAM_STUDI_OPTIONS = [
+  { value: 'Sci&Tech', label: 'Teknik Informatika' },
+  { value: 'Comm&Mgmt', label: 'Manajemen' },
+  { value: 'Others', label: 'Akuntansi' },
+];
 const SPECIALISASI_OPTIONS = ['Mkt&HR', 'Data Analytics', 'Software Dev', 'Other'];
 const STATUS_BEKERJA_OPTIONS = [
   'Bekerja',
@@ -13,6 +18,30 @@ const STATUS_BEKERJA_OPTIONS = [
   'Belum Bekerja',
   'Belum Memungkinkan Bekerja',
 ];
+const BIDANG_PEKERJAAN_OPTIONS = [
+  'Teknologi Informasi dan Komunikasi',
+  'Manajemen, Administrasi, dan Penjualan',
+  'Logistik dan Transportasi',
+  'Keuangan dan Asuransi',
+  'Pendidikan',
+  'Produksi dan Industri',
+  'Perdagangan dan Distribusi',
+  'Jasa Lainnya',
+];
+const KESESUAIAN_BIDANG_OPTIONS = [
+  'Sangat erat',
+  'Erat',
+  'Cukup erat',
+  'Kurang erat',
+  'Tidak sama sekali',
+];
+const TINGKAT_PENDIDIKAN_OPTIONS = [
+  'Setingkat lebih tinggi',
+  'Tingkat yang sama',
+  'Setingkat lebih rendah',
+  'Tidak perlu pendidikan tinggi',
+];
+const STATUS_BEKERJA_KEJA = ['Bekerja', 'Wirausaha/Startup'];
 
 const EMPTY_FORM = {
   nama: '',
@@ -28,18 +57,21 @@ const EMPTY_FORM = {
   ipk: '',
   statusBekerja: '',
   gajiJuta: '',
+  jabatan: '',
+  bidangPekerjaan: '',
+  kesesuaianBidang: '',
+  tingkatPendidikanSesuai: '',
 };
 
 export default function KuisionerPage() {
+  const navigate = useNavigate();
   const { user } = useAuthStore();
   const [form, setForm] = useState(EMPTY_FORM);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
-  const [prediksi, setPrediksi] = useState(null);
 
-  const isAlumni = user?.role === 'alumni';
+  const canFillKuisioner = user?.role === 'alumni' || user?.role === 'admin';
 
   useEffect(() => {
     let active = true;
@@ -61,6 +93,10 @@ export default function KuisionerPage() {
             ipk: data.ipk ?? '',
             statusBekerja: data.statusBekerja || '',
             gajiJuta: data.gajiJuta ?? '',
+            jabatan: data.jabatan ?? '',
+            bidangPekerjaan: data.bidangPekerjaan ?? '',
+            kesesuaianBidang: data.kesesuaianBidang ?? '',
+            tingkatPendidikanSesuai: data.tingkatPendidikanSesuai ?? '',
           });
         }
       } catch {
@@ -75,6 +111,23 @@ export default function KuisionerPage() {
   }, [user]);
 
   const setField = (field, value) => setForm((f) => ({ ...f, [field]: value }));
+
+  const isWorking = STATUS_BEKERJA_KEJA.includes(form.statusBekerja);
+
+  const handleStatusBekerjaChange = (value) => {
+    setForm((f) => {
+      const next = { ...f, statusBekerja: value };
+      if (!STATUS_BEKERJA_KEJA.includes(value)) {
+        // Keselarasan kerja hanya relevan untuk yang sudah bekerja/wirausaha;
+        // dikosongkan agar tidak terkirim ke backend.
+        next.jabatan = '';
+        next.bidangPekerjaan = '';
+        next.kesesuaianBidang = '';
+        next.tingkatPendidikanSesuai = '';
+      }
+      return next;
+    });
+  };
 
   // Masa tunggu kerja dihitung otomatis dari tanggal kelulusan & tanggal
   // mulai bekerja pertama (selisih bulan penuh, minimal 0).
@@ -94,8 +147,6 @@ export default function KuisionerPage() {
     e.preventDefault();
     setSaving(true);
     setError(null);
-    setSuccess(null);
-    setPrediksi(null);
     try {
       const payload = { ...form };
       if (payload.tahunMasuk !== '') payload.tahunMasuk = Number(payload.tahunMasuk);
@@ -104,8 +155,16 @@ export default function KuisionerPage() {
       if (payload.gajiJuta !== '') payload.gajiJuta = Number(payload.gajiJuta);
       delete payload.masaTungguBulan;
       const { data } = await api.post('/profile', payload);
-      setSuccess(data.message);
-      setPrediksi(data.prediksi);
+      // Setelah tersimpan, pindah ke halaman konfirmasi — form tidak
+      // ditampilkan lagi.
+      navigate('/kuisioner/sukses', {
+        replace: true,
+        state: {
+          form: payload,
+          profile: data.profile,
+          prediksi: data.prediksi,
+        },
+      });
     } catch (err) {
       const first = err.response?.data?.errors;
       const message = first
@@ -126,7 +185,7 @@ export default function KuisionerPage() {
       <CareerNavbar />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6">
-        {!isAlumni ? (
+        {!canFillKuisioner ? (
           <div className="rounded-2xl border border-slate-100 bg-white p-8 text-center shadow-sm">
             <AlertCircle className="mx-auto h-10 w-10 text-amber-500" />
             <h1 className="mt-3 text-lg font-bold text-slate-800">Khusus Alumni</h1>
@@ -147,25 +206,6 @@ export default function KuisionerPage() {
               </p>
             </div>
 
-            {success && (
-              <div className="mt-4 flex items-start gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
-                <div>
-                  <p className="font-semibold">{success}</p>
-                  {prediksi && (
-                    <p className="mt-1 text-emerald-600">
-                      Prediksi ketepatan lulus: masa studi {prediksi.masaStudi} tahun
-                      (ideal {form.jenjang} = {prediksi.durasiIdeal} tahun) →{' '}
-                      <span className="font-semibold">
-                        {prediksi.lulusTepatWaktu
-                          ? 'LULUS TEPAT WAKTU'
-                          : 'TIDAK TEPAT WAKTU'}
-                      </span>
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
             {error && (
               <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
                 <AlertCircle className="h-4 w-4 shrink-0" /> {error}
@@ -225,8 +265,8 @@ export default function KuisionerPage() {
                       >
                         <option value="">-- Pilih --</option>
                         {PROGRAM_STUDI_OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
                           </option>
                         ))}
                       </select>
@@ -313,7 +353,7 @@ export default function KuisionerPage() {
                       <select
                         className={inputCls}
                         value={form.statusBekerja}
-                        onChange={(e) => setField('statusBekerja', e.target.value)}
+                        onChange={(e) => handleStatusBekerjaChange(e.target.value)}
                         required
                       >
                         <option value="">-- Pilih --</option>
@@ -366,6 +406,106 @@ export default function KuisionerPage() {
                         placeholder="Opsional"
                       />
                     </div>
+
+                    {isWorking && (
+                      <>
+                        <div className="sm:col-span-2">
+                          <p className="mb-3 border-t border-slate-100 pt-4 text-sm font-semibold text-blue-600">
+                            Keselarasan Bidang Kerja (hanya untuk yang sudah bekerja)
+                          </p>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className={labelCls}>Jabatan / Posisi Saat Ini</label>
+                          <input
+                            className={inputCls}
+                            value={form.jabatan}
+                            onChange={(e) => setField('jabatan', e.target.value)}
+                            placeholder="Contoh: Staf IT Support, Pengelola Usaha"
+                            required
+                          />
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className={labelCls}>Bidang Pekerjaan</label>
+                          <select
+                            className={inputCls}
+                            value={form.bidangPekerjaan}
+                            onChange={(e) => setField('bidangPekerjaan', e.target.value)}
+                            required
+                          >
+                            <option value="">-- Pilih --</option>
+                            {BIDANG_PEKERJAAN_OPTIONS.map((opt) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className={labelCls}>
+                            Seberapa erat hubungan antara bidang studi dengan pekerjaan Anda
+                            saat ini?
+                          </label>
+                          <div className="grid gap-2 sm:grid-cols-3">
+                            {KESESUAIAN_BIDANG_OPTIONS.map((opt) => (
+                              <label
+                                key={opt}
+                                className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
+                                  form.kesesuaianBidang === opt
+                                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                    : 'border-slate-200 text-slate-600 hover:border-blue-300'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="kesesuaianBidang"
+                                  className="accent-blue-600"
+                                  value={opt}
+                                  checked={form.kesesuaianBidang === opt}
+                                  onChange={(e) => setField('kesesuaianBidang', e.target.value)}
+                                  required
+                                />
+                                {opt}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="sm:col-span-2">
+                          <label className={labelCls}>
+                            Menurut Anda, tingkat pendidikan apa yang paling sesuai untuk
+                            pekerjaan Anda saat ini?
+                          </label>
+                          <div className="grid gap-2 sm:grid-cols-2">
+                            {TINGKAT_PENDIDIKAN_OPTIONS.map((opt) => (
+                              <label
+                                key={opt}
+                                className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
+                                  form.tingkatPendidikanSesuai === opt
+                                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                    : 'border-slate-200 text-slate-600 hover:border-blue-300'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  name="tingkatPendidikanSesuai"
+                                  className="accent-blue-600"
+                                  value={opt}
+                                  checked={form.tingkatPendidikanSesuai === opt}
+                                  onChange={(e) =>
+                                    setField('tingkatPendidikanSesuai', e.target.value)
+                                  }
+                                  required
+                                />
+                                {opt}
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
 
                   <button

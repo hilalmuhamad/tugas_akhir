@@ -24,6 +24,7 @@ import api from '../../../services/api';
 import CareerNavbar from '../../career/components/CareerNavbar';
 import JobRecommendationCards from '../../career/components/JobRecommendationCards';
 import { laporanUnduhUrl } from '../utils/laporan';
+import { prodiLabel } from '../../../utils/prodiLabel';
 
 const ROLE_LABEL = { admin: 'Admin', alumni: 'Alumni', viewer: 'Viewer' };
 
@@ -280,7 +281,7 @@ export default function DashboardPage() {
                       {gajiPerProdi.map(([prodi, nilai]) => (
                         <div key={prodi}>
                           <div className="flex items-center justify-between text-xs text-slate-600">
-                            <span className="font-medium">{prodi}</span>
+                            <span className="font-medium">{prodiLabel(prodi)}</span>
                             <span className="font-semibold">{nilai} jt</span>
                           </div>
                           <div className="mt-1 h-2 rounded-full bg-slate-100">
@@ -301,7 +302,7 @@ export default function DashboardPage() {
                       {persenPerProdi.map(([prodi, nilai]) => (
                         <div key={prodi}>
                           <div className="flex items-center justify-between text-xs text-slate-600">
-                            <span className="font-medium">{prodi}</span>
+                            <span className="font-medium">{prodiLabel(prodi)}</span>
                             <span className="font-semibold">{nilai}%</span>
                           </div>
                           <div className="mt-1 h-2 rounded-full bg-slate-100">

@@ -1,216 +1,216 @@
-id,nama,gender,programStudi,specialisasi,pengalamanKerja,tahunLulus,ipk,statusBekerja,masaTungguBulan,gajiJuta,jenjang,tahunMasuk
-1,Michael Harris,L,Sci&Tech,Mkt&HR,Tidak,2021,3.17,Bekerja,10.0,9.8,S1,2016
-2,Samuel Mitchell,L,Comm&Mgmt,Mkt&HR,Tidak,2021,3.93,Belum Memungkinkan Bekerja,,,S1,2017
-3,Amanda Harris,P,Sci&Tech,Mkt&Fin,Tidak,2025,2.73,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020
-4,James Clark,L,Others,Mkt&Fin,Tidak,2024,3.07,Wirausaha/Startup,8.0,8.7,S1,2020
-5,Hannah Thompson,P,Sci&Tech,Mkt&HR,Tidak,2021,3.65,Wirausaha/Startup,4.0,4.7,D3,2018
-6,James Miller,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,2.79,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020
-7,Joseph Johnson,L,Others,Mkt&HR,Tidak,2025,3.71,Bekerja,4.0,3.9,S1,2020
-8,Jessica Brown,P,Comm&Mgmt,Mkt&Fin,Tidak,2023,2.81,Bekerja,9.0,9.5,S1,2018
-9,Rachel Moore,P,Sci&Tech,Mkt&HR,Tidak,2023,3.48,Belum Memungkinkan Bekerja,,,D3,2020
-10,Hannah Anderson,P,Sci&Tech,Mkt&Fin,Tidak,2025,3.7,Bekerja,3.0,6.9,S1,2021
-11,Julia Williams,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.11,Bekerja,4.0,6.8,S1,2018
-12,Benjamin Young,L,Comm&Mgmt,Mkt&Fin,Tidak,2022,3.07,Bekerja,3.0,10.4,S1,2017
-13,Charlotte Bennett,P,Sci&Tech,Mkt&HR,Tidak,2023,3.25,Belum Memungkinkan Bekerja,,,S1,2019
-14,Rachel Davis,P,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.01,Bekerja,10.0,3.3,S1,2016
-15,Emma Lewis,P,Others,Mkt&HR,Ya,2022,3.58,Bekerja,9.0,8.9,S1,2018
-16,Natalie Clark,P,Others,Mkt&Fin,Tidak,2024,3.68,Bekerja,7.0,5.0,D3,2021
-17,Emily Bennett,P,Comm&Mgmt,Mkt&HR,Tidak,2023,3.36,Bekerja,6.0,3.6,S1,2019
-18,David Miller,L,Sci&Tech,Mkt&Fin,Tidak,2023,3.96,Melanjutkan Studi,,,D3,2020
-19,Henry Miller,L,Others,Mkt&Fin,Tidak,2023,3.48,Melanjutkan Studi,,,S1,2018
-20,David Brown,L,Sci&Tech,Mkt&HR,Tidak,2023,3.67,Melanjutkan Studi,,,S1,2019
-21,Alexander Moore,L,Comm&Mgmt,Mkt&Fin,Ya,2023,3.63,Melanjutkan Studi,,,S1,2018
-22,Claire Robinson,P,Others,Mkt&HR,Ya,2023,3.27,Melanjutkan Studi,,,S1,2019
-23,Michael Carter,L,Sci&Tech,Mkt&HR,Ya,2025,3.51,Wirausaha/Startup,5.0,7.6,S1,2020
-24,Jessica Williams,P,Others,Mkt&Fin,Tidak,2024,2.68,Bekerja,9.0,10.0,S1,2019
-25,Sarah Walker,P,Others,Mkt&Fin,Tidak,2023,3.84,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018
-26,Oliver Brown,L,Comm&Mgmt,Mkt&Fin,Ya,2022,2.73,Bekerja,8.0,8.5,D3,2019
-27,Matthew Thompson,L,Others,Mkt&Fin,Ya,2022,3.15,Bekerja,9.0,5.1,S1,2018
-28,Benjamin Wilson,L,Others,Mkt&HR,Ya,2022,3.94,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2019
-29,Amanda Davis,P,Sci&Tech,Mkt&Fin,Tidak,2025,3.19,Bekerja,5.0,10.1,D3,2022
-30,Alexander Thompson,L,Others,Mkt&HR,Ya,2022,3.79,Melanjutkan Studi,,,S1,2018
-31,Amanda Brown,P,Others,Mkt&HR,Tidak,2022,3.97,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018
-32,Natalie Williams,P,Sci&Tech,Mkt&Fin,Tidak,2024,3.99,Bekerja,9.0,7.7,S1,2019
-33,Jack Foster,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.02,Bekerja,6.0,3.7,S1,2021
-34,Henry Mitchell,L,Comm&Mgmt,Mkt&Fin,Ya,2023,3.64,Bekerja,4.0,7.1,S1,2019
-35,Matthew Anderson,L,Sci&Tech,Mkt&Fin,Tidak,2022,3.21,Bekerja,4.0,7.4,S1,2018
-36,Olivia Harris,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.21,Bekerja,5.0,9.2,D3,2019
-37,Charlotte Carter,P,Sci&Tech,Mkt&HR,Tidak,2025,3.38,Bekerja,4.0,10.8,D3,2022
-38,David Young,L,Others,Mkt&Fin,Tidak,2023,3.5,Bekerja,5.0,5.9,S1,2019
-39,Rachel Walker,P,Sci&Tech,Mkt&Fin,Tidak,2021,2.72,Bekerja,2.0,9.4,D3,2018
-40,Samuel Young,L,Sci&Tech,Mkt&HR,Ya,2023,3.59,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019
-41,Leo Miller,L,Others,Mkt&HR,Ya,2025,2.95,Bekerja,9.0,9.3,S1,2021
-42,Alexander Wilson,L,Sci&Tech,Mkt&HR,Tidak,2025,3.29,Bekerja,4.0,9.9,S1,2020
-43,Nathan Taylor,L,Sci&Tech,Mkt&Fin,Tidak,2022,3.99,Bekerja,2.0,3.5,S1,2018
-44,Jessica Mitchell,P,Others,Mkt&Fin,Ya,2023,2.86,Bekerja,8.0,6.5,S1,2019
-45,Michael Harris,L,Comm&Mgmt,Mkt&HR,Tidak,2021,3.8,Bekerja,8.0,10.1,S1,2016
-46,Olivia Harris,P,Sci&Tech,Mkt&Fin,Ya,2024,3.53,Bekerja,7.0,7.7,S1,2019
-47,Julia Davis,P,Sci&Tech,Mkt&HR,Tidak,2025,3.82,Wirausaha/Startup,4.0,9.2,S1,2021
-48,Laura Robinson,P,Comm&Mgmt,Mkt&HR,Ya,2024,3.07,Bekerja,9.0,7.0,S1,2020
-49,Ryan Davis,L,Comm&Mgmt,Mkt&Fin,Tidak,2022,3.27,Bekerja,4.0,7.0,S1,2018
-50,Matthew Lewis,L,Others,Mkt&HR,Tidak,2024,3.84,Wirausaha/Startup,7.0,6.2,D3,2021
-51,Isabella Brown,P,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.47,Bekerja,2.0,8.5,D3,2018
-52,Sophia Carter,P,Sci&Tech,Mkt&Fin,Tidak,2022,2.69,Melanjutkan Studi,,,D3,2019
-53,David Foster,L,Sci&Tech,Mkt&HR,Ya,2024,3.87,Belum Memungkinkan Bekerja,,,S1,2019
-54,Isabella Lewis,P,Others,Mkt&Fin,Tidak,2023,3.31,Bekerja,3.0,9.7,S1,2019
-55,Oliver Young,L,Sci&Tech,Mkt&Fin,Tidak,2025,3.22,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021
-56,Isabella Brown,P,Others,Mkt&Fin,Tidak,2022,3.8,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2017
-57,Chloe Wilson,P,Others,Mkt&HR,Ya,2021,3.99,Bekerja,7.0,7.3,S1,2017
-58,Rachel Johnson,P,Comm&Mgmt,Mkt&HR,Tidak,2023,3.35,Bekerja,5.0,7.2,S1,2019
-59,Ryan Young,L,Comm&Mgmt,Mkt&Fin,Tidak,2023,3.01,Wirausaha/Startup,9.0,10.4,D3,2020
-60,Isabella Anderson,P,Sci&Tech,Mkt&Fin,Ya,2022,2.93,Bekerja,1.0,6.3,D3,2019
-61,Daniel Mitchell,L,Comm&Mgmt,Mkt&HR,Tidak,2024,3.89,Wirausaha/Startup,5.0,9.7,S1,2020
-62,Claire Lewis,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.28,Bekerja,2.0,6.0,S1,2018
-63,Emma Taylor,P,Others,Mkt&HR,Ya,2024,3.42,Bekerja,6.0,10.3,S1,2020
-64,Claire Young,P,Sci&Tech,Mkt&Fin,Tidak,2021,2.95,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2016
-65,Isabella Bennett,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.76,Bekerja,5.0,8.8,S1,2017
-66,Michael Williams,L,Sci&Tech,Mkt&HR,Tidak,2025,3.3,Belum Memungkinkan Bekerja,,,S1,2021
-67,Oliver Anderson,L,Others,Mkt&Fin,Tidak,2021,3.83,Belum Memungkinkan Bekerja,,,S1,2017
-68,Hannah Miller,P,Comm&Mgmt,Mkt&Fin,Ya,2022,2.82,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018
-69,Emily Carter,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.58,Bekerja,6.0,9.1,D3,2018
-70,Henry Johnson,L,Others,Mkt&HR,Tidak,2023,2.72,Bekerja,2.0,4.9,S1,2019
-71,Rachel Walker,P,Others,Mkt&Fin,Tidak,2022,3.68,Bekerja,5.0,3.9,D3,2019
-72,Thomas Foster,L,Comm&Mgmt,Mkt&HR,Tidak,2021,3.99,Belum Memungkinkan Bekerja,,,S1,2017
-73,Oliver Wilson,L,Sci&Tech,Mkt&HR,Ya,2022,2.67,Melanjutkan Studi,,,S1,2017
-74,Charlotte Walker,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.38,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2018
-75,William Thompson,L,Others,Mkt&HR,Tidak,2025,2.95,Bekerja,3.0,7.0,D3,2022
-76,Jack Thompson,L,Sci&Tech,Mkt&HR,Tidak,2022,3.42,Bekerja,3.0,10.0,S1,2018
-77,Jessica Miller,P,Sci&Tech,Mkt&HR,Tidak,2025,2.74,Belum Memungkinkan Bekerja,,,S1,2021
-78,Jessica Mitchell,P,Others,Mkt&HR,Tidak,2021,3.62,Wirausaha/Startup,1.0,3.3,S1,2017
-79,Emma Young,P,Sci&Tech,Mkt&HR,Tidak,2022,2.81,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018
-80,Lucas Young,L,Sci&Tech,Mkt&HR,Tidak,2024,2.73,Belum Memungkinkan Bekerja,,,S1,2019
-81,Megan Harris,P,Comm&Mgmt,Mkt&HR,Ya,2023,3.23,Wirausaha/Startup,5.0,4.8,S1,2019
-82,Henry Foster,L,Comm&Mgmt,Mkt&HR,Ya,2021,3.76,Melanjutkan Studi,,,S1,2017
-83,Oliver Davis,L,Comm&Mgmt,Mkt&Fin,Ya,2024,2.98,Belum Memungkinkan Bekerja,,,S1,2019
-84,David Moore,L,Sci&Tech,Mkt&Fin,Tidak,2023,3.92,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020
-85,Benjamin Mitchell,L,Comm&Mgmt,Mkt&HR,Tidak,2023,3.27,Belum Memungkinkan Bekerja,,,D3,2020
-86,Samuel Johnson,L,Sci&Tech,Mkt&Fin,Tidak,2023,3.4,Bekerja,5.0,6.4,D3,2020
-87,Grace Johnson,P,Others,Mkt&Fin,Tidak,2021,3.95,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2017
-88,Andrew Lewis,L,Sci&Tech,Mkt&HR,Tidak,2023,3.13,Bekerja,6.0,6.7,S1,2019
-89,Julia Harris,P,Comm&Mgmt,Mkt&Fin,Ya,2021,2.69,Melanjutkan Studi,,,D3,2018
-90,Charlotte Moore,P,Comm&Mgmt,Mkt&HR,Ya,2024,2.6,Bekerja,5.0,10.5,S1,2020
-91,Alexander Moore,L,Sci&Tech,Mkt&Fin,Ya,2023,3.9,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020
-92,Hannah Bennett,P,Sci&Tech,Mkt&HR,Ya,2021,3.78,Bekerja,8.0,6.9,S1,2017
-93,James Moore,L,Comm&Mgmt,Mkt&HR,Tidak,2024,3.05,Bekerja,6.0,9.7,S1,2020
-94,Hannah Taylor,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.99,Belum Memungkinkan Bekerja,,,S1,2017
-95,Daniel Miller,L,Sci&Tech,Mkt&Fin,Tidak,2022,3.85,Wirausaha/Startup,7.0,10.4,S1,2018
-96,Grace Clark,P,Others,Mkt&HR,Tidak,2025,2.84,Bekerja,8.0,10.8,S1,2021
-97,William Thompson,L,Comm&Mgmt,Mkt&HR,Tidak,2021,3.2,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2017
-98,Benjamin Carter,L,Others,Mkt&HR,Tidak,2023,3.84,Melanjutkan Studi,,,D3,2020
-99,Grace Davis,P,Comm&Mgmt,Mkt&HR,Tidak,2022,2.67,Bekerja,2.0,8.6,D3,2019
-100,Emma Taylor,P,Sci&Tech,Mkt&HR,Tidak,2022,2.62,Bekerja,10.0,6.6,S1,2017
-101,David Foster,L,Others,Mkt&HR,Tidak,2021,3.48,Melanjutkan Studi,,,S1,2016
-102,Charlotte Lewis,P,Comm&Mgmt,Mkt&Fin,Ya,2025,3.52,Bekerja,2.0,4.1,S1,2021
-103,Thomas Lewis,L,Others,Mkt&Fin,Tidak,2021,3.38,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2017
-104,Ethan Carter,L,Others,Mkt&Fin,Tidak,2022,3.69,Bekerja,7.0,3.5,S1,2017
-105,Laura Anderson,P,Others,Mkt&HR,Tidak,2025,2.77,Bekerja,6.0,6.9,S1,2020
-106,Chloe Young,P,Others,Mkt&Fin,Tidak,2022,3.56,Bekerja,5.0,9.3,S1,2018
-107,David Davis,L,Comm&Mgmt,Mkt&HR,Tidak,2022,3.48,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018
-108,Benjamin Taylor,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.12,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021
-109,Nathan Brown,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.79,Bekerja,9.0,10.1,D3,2018
-110,Oliver Young,L,Comm&Mgmt,Mkt&Fin,Tidak,2023,3.19,Belum Memungkinkan Bekerja,,,S1,2018
-111,Emily Bennett,P,Others,Mkt&Fin,Tidak,2024,2.63,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020
-112,Alexander Carter,L,Others,Mkt&HR,Ya,2021,3.33,Bekerja,4.0,7.1,D3,2018
-113,Andrew Williams,L,Others,Mkt&Fin,Tidak,2021,2.6,Wirausaha/Startup,6.0,10.1,S1,2017
-114,Emma Mitchell,P,Comm&Mgmt,Mkt&HR,Tidak,2022,2.59,Bekerja,3.0,11.0,S1,2018
-115,Isabella Young,P,Sci&Tech,Mkt&HR,Tidak,2023,3.55,Bekerja,5.0,7.5,D3,2020
-116,Chloe Williams,P,Others,Mkt&HR,Tidak,2021,3.66,Wirausaha/Startup,2.0,10.7,S1,2016
-117,Matthew Brown,L,Others,Mkt&Fin,Ya,2024,3.01,Bekerja,2.0,5.3,S1,2019
-118,Charlotte Brown,P,Comm&Mgmt,Mkt&HR,Tidak,2025,2.54,Bekerja,3.0,4.5,S1,2021
-119,Leo Clark,L,Sci&Tech,Mkt&HR,Tidak,2024,3.25,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020
-120,Daniel Young,L,Others,Mkt&Fin,Tidak,2024,2.59,Melanjutkan Studi,,,S1,2020
-121,Megan Moore,P,Sci&Tech,Mkt&HR,Tidak,2023,2.62,Bekerja,2.0,8.2,S1,2019
-122,Andrew Young,L,Sci&Tech,Mkt&Fin,Tidak,2025,3.01,Belum Memungkinkan Bekerja,,,S1,2021
-123,Jessica Johnson,P,Others,Mkt&HR,Ya,2024,3.51,Bekerja,2.0,4.0,D3,2021
-124,Sophia Carter,P,Others,Mkt&HR,Tidak,2023,2.67,Belum Memungkinkan Bekerja,,,S1,2019
-125,Natalie Foster,P,Comm&Mgmt,Mkt&HR,Tidak,2024,2.7,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2021
-126,William Walker,L,Others,Mkt&Fin,Ya,2023,3.07,Bekerja,7.0,5.0,S1,2019
-127,Benjamin Foster,L,Sci&Tech,Mkt&Fin,Ya,2024,3.85,Bekerja,10.0,4.3,S1,2020
-128,Matthew Foster,L,Comm&Mgmt,Mkt&HR,Tidak,2023,2.99,Bekerja,4.0,10.7,D3,2020
-129,Amanda Mitchell,P,Others,Mkt&HR,Tidak,2023,3.84,Melanjutkan Studi,,,D3,2020
-130,Leo Foster,L,Sci&Tech,Mkt&HR,Tidak,2022,3.29,Bekerja,4.0,4.1,S1,2018
-131,Charlotte Robinson,P,Comm&Mgmt,Mkt&Fin,Ya,2022,3.58,Bekerja,9.0,7.6,D3,2019
-132,Claire Walker,P,Others,Mkt&Fin,Tidak,2022,2.9,Bekerja,5.0,9.9,S1,2017
-133,Julia Clark,P,Sci&Tech,Mkt&Fin,Ya,2023,3.03,Bekerja,4.0,8.0,S1,2019
-134,Henry Miller,L,Sci&Tech,Mkt&HR,Ya,2022,3.22,Bekerja,5.0,8.4,S1,2018
-135,Olivia Thompson,P,Others,Mkt&Fin,Tidak,2021,3.16,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2017
-136,Ethan Anderson,L,Others,Mkt&HR,Tidak,2024,3.63,Melanjutkan Studi,,,D3,2021
-137,Amelia Wilson,P,Sci&Tech,Mkt&Fin,Ya,2021,3.02,Bekerja,6.0,5.9,S1,2016
-138,Michael Mitchell,L,Others,Mkt&HR,Tidak,2023,3.4,Melanjutkan Studi,,,S1,2019
-139,Hannah Bennett,P,Sci&Tech,Mkt&Fin,Tidak,2024,2.96,Bekerja,2.0,5.3,S1,2019
-140,Chloe Harris,P,Others,Mkt&Fin,Tidak,2024,2.81,Bekerja,3.0,7.6,D3,2021
-141,Olivia Taylor,P,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.69,Belum Memungkinkan Bekerja,,,S1,2021
-142,Rachel Williams,P,Sci&Tech,Mkt&HR,Tidak,2025,3.19,Belum Memungkinkan Bekerja,,,S1,2021
-143,Andrew Carter,L,Others,Mkt&Fin,Tidak,2022,2.63,Bekerja,1.0,10.0,S1,2017
-144,Henry Robinson,L,Sci&Tech,Mkt&Fin,Tidak,2024,3.3,Bekerja,4.0,9.3,S1,2020
-145,Rachel Wilson,P,Sci&Tech,Mkt&HR,Tidak,2022,2.77,Melanjutkan Studi,,,S1,2018
-146,William Brown,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.92,Belum Memungkinkan Bekerja,,,S1,2017
-147,Claire Anderson,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.52,Wirausaha/Startup,5.0,10.9,S1,2018
-148,Alexander Clark,L,Sci&Tech,Mkt&HR,Tidak,2021,3.55,Bekerja,3.0,9.3,S1,2017
-149,Ryan Williams,L,Sci&Tech,Mkt&Fin,Tidak,2021,2.64,Melanjutkan Studi,,,S1,2017
-150,Alexander Johnson,L,Others,Mkt&HR,Ya,2024,2.64,Bekerja,1.0,9.5,D3,2021
-151,Alexander Moore,L,Sci&Tech,Mkt&Fin,Ya,2022,3.38,Bekerja,3.0,9.1,S1,2017
-152,William Young,L,Sci&Tech,Mkt&HR,Tidak,2025,3.08,Bekerja,1.0,6.7,S1,2020
-153,Sophia Brown,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.29,Bekerja,3.0,10.8,D3,2019
-154,Victoria Lewis,P,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.72,Bekerja,2.0,8.4,S1,2020
-155,Sarah Carter,P,Comm&Mgmt,Mkt&HR,Tidak,2024,2.59,Bekerja,6.0,9.9,D3,2021
-156,Rachel Brown,P,Sci&Tech,Mkt&HR,Tidak,2021,3.66,Belum Memungkinkan Bekerja,,,S1,2017
-157,Victoria Lewis,P,Sci&Tech,Mkt&Fin,Ya,2022,3.63,Belum Memungkinkan Bekerja,,,S1,2018
-158,Charlotte Foster,P,Others,Mkt&HR,Ya,2025,3.36,Melanjutkan Studi,,,S1,2021
-159,Jessica Thompson,P,Others,Mkt&Fin,Tidak,2024,3.97,Melanjutkan Studi,,,S1,2020
-160,Ethan Young,L,Sci&Tech,Mkt&HR,Tidak,2023,3.25,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018
-161,Leo Mitchell,L,Sci&Tech,Mkt&Fin,Ya,2024,3.93,Bekerja,3.0,6.9,D3,2021
-162,Oliver Walker,L,Others,Mkt&HR,Ya,2022,3.85,Belum Memungkinkan Bekerja,,,S1,2017
-163,William Lewis,L,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.57,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2021
-164,Daniel Taylor,L,Sci&Tech,Mkt&HR,Tidak,2023,3.95,Wirausaha/Startup,10.0,4.2,D3,2020
-165,Lucas Davis,L,Others,Mkt&HR,Ya,2021,3.85,Melanjutkan Studi,,,S1,2017
-166,Ryan Taylor,L,Comm&Mgmt,Mkt&HR,Ya,2024,3.74,Bekerja,2.0,4.1,S1,2020
-167,Sophia Walker,P,Sci&Tech,Mkt&Fin,Tidak,2024,3.54,Bekerja,6.0,3.3,S1,2019
-168,Benjamin Walker,L,Comm&Mgmt,Mkt&Fin,Ya,2023,3.62,Bekerja,4.0,3.4,S1,2018
-169,Sarah Harris,P,Comm&Mgmt,Mkt&HR,Tidak,2021,3.43,Bekerja,4.0,6.2,S1,2017
-170,Alexander Davis,L,Comm&Mgmt,Mkt&HR,Tidak,2025,3.63,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020
-171,Ryan Robinson,L,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.98,Bekerja,8.0,3.9,S1,2020
-172,Leo Mitchell,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,2.77,Bekerja,3.0,6.4,S1,2017
-173,Joseph Carter,L,Sci&Tech,Mkt&HR,Ya,2021,2.62,Bekerja,2.0,3.9,S1,2017
-174,Olivia Moore,P,Sci&Tech,Mkt&HR,Tidak,2021,3.36,Bekerja,1.0,8.6,S1,2016
-175,Isabella Brown,P,Others,Mkt&HR,Ya,2023,3.93,Bekerja,5.0,7.9,D3,2020
-176,Julia Wilson,P,Others,Mkt&Fin,Tidak,2025,2.54,Bekerja,9.0,8.4,D3,2022
-177,Jessica Mitchell,P,Comm&Mgmt,Mkt&HR,Tidak,2021,3.25,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2017
-178,Benjamin Taylor,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,2.57,Bekerja,1.0,9.4,S1,2016
-179,Chloe Johnson,P,Others,Mkt&Fin,Tidak,2021,3.05,Bekerja,4.0,4.0,S1,2016
-180,Julia Carter,P,Others,Mkt&Fin,Tidak,2024,2.84,Melanjutkan Studi,,,S1,2020
-181,William Young,L,Others,Mkt&HR,Ya,2021,3.94,Bekerja,10.0,8.4,S1,2016
-182,Leo Davis,L,Others,Mkt&Fin,Tidak,2025,3.71,Bekerja,5.0,6.7,S1,2020
-183,Nathan Harris,L,Others,Mkt&Fin,Ya,2024,2.96,Bekerja,7.0,4.0,S1,2020
-184,Natalie Anderson,P,Comm&Mgmt,Mkt&HR,Ya,2025,3.36,Melanjutkan Studi,,,S1,2021
-185,Emily Johnson,P,Others,Mkt&Fin,Ya,2025,3.62,Bekerja,8.0,3.2,S1,2020
-186,Matthew Walker,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.16,Melanjutkan Studi,,,S1,2021
-187,Thomas Harris,L,Others,Mkt&Fin,Ya,2025,3.65,Bekerja,8.0,7.2,S1,2021
-188,Julia Harris,P,Comm&Mgmt,Mkt&HR,Tidak,2025,2.54,Bekerja,1.0,5.0,D3,2022
-189,Natalie Bennett,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.22,Bekerja,5.0,3.3,S1,2017
-190,Lucas Clark,L,Sci&Tech,Mkt&Fin,Ya,2025,2.94,Melanjutkan Studi,,,S1,2021
-191,Samuel Thompson,L,Others,Mkt&Fin,Tidak,2021,2.93,Melanjutkan Studi,,,S1,2016
-192,Sarah Williams,P,Others,Mkt&HR,Ya,2025,3.56,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2022
-193,Nathan Walker,L,Comm&Mgmt,Mkt&HR,Ya,2025,3.81,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2022
-194,Jessica Anderson,P,Sci&Tech,Mkt&HR,Tidak,2025,3.12,Bekerja,2.0,8.0,S1,2020
-195,Matthew Walker,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.68,Melanjutkan Studi,,,D3,2022
-196,Julia Taylor,P,Comm&Mgmt,Mkt&Fin,Tidak,2023,2.69,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020
-197,Alexander Robinson,L,Comm&Mgmt,Mkt&HR,Tidak,2021,2.63,Bekerja,7.0,3.8,S1,2017
-198,Claire Wilson,P,Sci&Tech,Mkt&HR,Tidak,2024,2.91,Bekerja,5.0,4.0,S1,2019
-199,Amanda Wilson,P,Sci&Tech,Mkt&HR,Tidak,2025,3.43,Bekerja,8.0,3.0,D3,2022
-200,Laura Robinson,P,Sci&Tech,Mkt&HR,Tidak,2024,3.89,Belum Memungkinkan Bekerja,,,S1,2020
-201,Julia Lewis,P,Comm&Mgmt,Mkt&HR,Tidak,2024,3.5,Bekerja,7.0,4.3,S1,2019
-202,Laura Wilson,P,Others,Mkt&HR,Tidak,2024,2.77,Bekerja,3.0,8.2,S1,2019
-203,Amelia Bennett,P,Comm&Mgmt,Mkt&Fin,Tidak,2023,2.6,Bekerja,3.0,6.3,S1,2019
-204,Lucas Anderson,L,Comm&Mgmt,Mkt&Fin,Ya,2025,3.06,Bekerja,1.0,7.1,D3,2022
-205,Rachel Mitchell,P,Others,Mkt&Fin,Tidak,2022,3.32,Bekerja,5.0,9.6,D3,2019
-206,Chloe Taylor,P,Comm&Mgmt,Mkt&HR,Tidak,2025,3.05,Bekerja,8.0,8.3,D3,2022
-207,Leo Walker,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,2.96,Bekerja,3.0,9.0,D3,2018
-208,Samuel Anderson,L,Sci&Tech,Mkt&Fin,Tidak,2024,3.34,Bekerja,4.0,10.9,S1,2020
-209,Michael Wilson,L,Sci&Tech,Mkt&Fin,Ya,2024,3.51,Melanjutkan Studi,,,D3,2021
-210,David Williams,L,Sci&Tech,Mkt&HR,Tidak,2022,3.97,Bekerja,2.0,8.2,S1,2018
-211,Samuel Thompson,L,Sci&Tech,Mkt&HR,Tidak,2021,3.77,Wirausaha/Startup,5.0,6.7,S1,2017
-212,Jack Taylor,L,Sci&Tech,Mkt&HR,Ya,2025,2.95,Melanjutkan Studi,,,S1,2021
-213,Amanda Lewis,P,Others,Mkt&Fin,Ya,2025,3.96,Bekerja,2.0,8.1,D3,2022
-214,William Young,L,Others,Mkt&HR,Tidak,2023,3.08,Belum Memungkinkan Bekerja,,,S1,2018
-215,Claire Williams,P,Comm&Mgmt,Mkt&Fin,Tidak,2023,2.8,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019
+id,nama,gender,programStudi,specialisasi,pengalamanKerja,tahunLulus,ipk,statusBekerja,masaTungguBulan,gajiJuta,jenjang,tahunMasuk,jabatan,bidangPekerjaan,kesesuaianBidang,tingkatPendidikanSesuai
+1,Michael Harris,L,Sci&Tech,Mkt&HR,Tidak,2021,3.17,Bekerja,10.0,9.8,S1,2018,Staf IT Support,Teknologi Informasi dan Komunikasi,Sangat erat,Setingkat lebih tinggi
+2,Samuel Mitchell,L,Comm&Mgmt,Mkt&HR,Tidak,2021,3.93,Belum Memungkinkan Bekerja,,,S1,2020,,,,
+3,Amanda Harris,P,Sci&Tech,Mkt&Fin,Tidak,2021,2.73,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020,,,,
+4,James Clark,L,Others,Mkt&Fin,Tidak,2021,3.07,Wirausaha/Startup,8.0,8.7,S1,2019,Pengelola Usaha,Pendidikan,Cukup erat,Tingkat yang sama
+5,Hannah Thompson,P,Sci&Tech,Mkt&HR,Tidak,2021,3.65,Wirausaha/Startup,4.0,4.7,D3,2021,Pengelola Usaha,Teknologi Informasi dan Komunikasi,Cukup erat,Setingkat lebih rendah
+6,James Miller,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,2.79,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020,,,,
+7,Joseph Johnson,L,Others,Mkt&HR,Tidak,2021,3.71,Bekerja,4.0,3.9,S1,2018,Staf Quality Control,Produksi dan Industri,Erat,Tingkat yang sama
+8,Jessica Brown,P,Comm&Mgmt,Mkt&Fin,Tidak,2021,2.81,Bekerja,9.0,9.5,S1,2019,Staf Gudang,Logistik dan Transportasi,Erat,Tingkat yang sama
+9,Rachel Moore,P,Sci&Tech,Mkt&HR,Tidak,2021,3.48,Belum Memungkinkan Bekerja,,,D3,2022,,,,
+10,Hannah Anderson,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.7,Bekerja,3.0,6.9,S1,2019,Administrator Jaringan,Teknologi Informasi dan Komunikasi,Erat,Setingkat lebih tinggi
+11,Julia Williams,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.11,Bekerja,4.0,6.8,S1,2020,Teknisi Produksi,Produksi dan Industri,Cukup erat,Tingkat yang sama
+12,Benjamin Young,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.07,Bekerja,3.0,10.4,S1,2020,Staf Ekspedisi,Logistik dan Transportasi,Cukup erat,Tingkat yang sama
+13,Charlotte Bennett,P,Sci&Tech,Mkt&HR,Tidak,2021,3.25,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+14,Rachel Davis,P,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.01,Bekerja,10.0,3.3,S1,2019,Supervisor Penjualan,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih rendah
+15,Emma Lewis,P,Others,Mkt&HR,Ya,2021,3.58,Bekerja,9.0,8.9,S1,2021,Merchandiser,Perdagangan dan Distribusi,Sangat erat,Setingkat lebih tinggi
+16,Natalie Clark,P,Others,Mkt&Fin,Tidak,2021,3.68,Bekerja,7.0,5.0,D3,2020,Staf Distribusi,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+17,Emily Bennett,P,Comm&Mgmt,Mkt&HR,Tidak,2021,3.36,Bekerja,6.0,3.6,S1,2020,Staf Administrasi,"Manajemen, Administrasi, dan Penjualan",Cukup erat,Setingkat lebih tinggi
+18,David Miller,L,Sci&Tech,Mkt&Fin,Tidak,2021,3.96,Melanjutkan Studi,,,D3,2022,,,,
+19,Henry Miller,L,Others,Mkt&Fin,Tidak,2021,3.48,Melanjutkan Studi,,,S1,2018,,,,
+20,David Brown,L,Sci&Tech,Mkt&HR,Tidak,2021,3.67,Melanjutkan Studi,,,S1,2020,,,,
+21,Alexander Moore,L,Comm&Mgmt,Mkt&Fin,Ya,2021,3.63,Melanjutkan Studi,,,S1,2020,,,,
+22,Claire Robinson,P,Others,Mkt&HR,Ya,2021,3.27,Melanjutkan Studi,,,S1,2019,,,,
+23,Michael Carter,L,Sci&Tech,Mkt&HR,Ya,2021,3.51,Wirausaha/Startup,5.0,7.6,S1,2019,Pendiri Usaha,Teknologi Informasi dan Komunikasi,Sangat erat,Setingkat lebih tinggi
+24,Jessica Williams,P,Others,Mkt&Fin,Tidak,2021,2.68,Bekerja,9.0,10.0,S1,2020,Merchandiser,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+25,Sarah Walker,P,Others,Mkt&Fin,Tidak,2021,3.84,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018,,,,
+26,Oliver Brown,L,Comm&Mgmt,Mkt&Fin,Ya,2021,2.73,Bekerja,8.0,8.5,D3,2021,Instruktur Pelatihan,Pendidikan,Cukup erat,Tingkat yang sama
+27,Matthew Thompson,L,Others,Mkt&Fin,Ya,2021,3.15,Bekerja,9.0,5.1,S1,2021,Merchandiser,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+28,Benjamin Wilson,L,Others,Mkt&HR,Ya,2021,3.94,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020,,,,
+29,Amanda Davis,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.19,Bekerja,5.0,10.1,D3,2021,Web Developer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+30,Alexander Thompson,L,Others,Mkt&HR,Ya,2021,3.79,Melanjutkan Studi,,,S1,2021,,,,
+31,Amanda Brown,P,Others,Mkt&HR,Tidak,2021,3.97,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+32,Natalie Williams,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.99,Bekerja,9.0,7.7,S1,2019,Staf Quality Control,Produksi dan Industri,Cukup erat,Tingkat yang sama
+33,Jack Foster,L,Comm&Mgmt,Mkt&Fin,Tidak,2021,3.02,Bekerja,6.0,3.7,S1,2021,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih tinggi
+34,Henry Mitchell,L,Comm&Mgmt,Mkt&Fin,Ya,2021,3.64,Bekerja,4.0,7.1,S1,2019,Supervisor Penjualan,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Setingkat lebih tinggi
+35,Matthew Anderson,L,Sci&Tech,Mkt&Fin,Tidak,2021,3.21,Bekerja,4.0,7.4,S1,2020,Programmer,Teknologi Informasi dan Komunikasi,Erat,Setingkat lebih tinggi
+36,Olivia Harris,P,Sci&Tech,Mkt&Fin,Tidak,2021,3.21,Bekerja,5.0,9.2,D3,2022,Web Developer,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+37,Charlotte Carter,P,Sci&Tech,Mkt&HR,Tidak,2021,3.38,Bekerja,4.0,10.8,D3,2020,Staf Gudang,Logistik dan Transportasi,Erat,Setingkat lebih tinggi
+38,David Young,L,Others,Mkt&Fin,Tidak,2021,3.5,Bekerja,5.0,5.9,S1,2020,Kepala Toko,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+39,Rachel Walker,P,Sci&Tech,Mkt&Fin,Tidak,2021,2.72,Bekerja,2.0,9.4,D3,2022,Quality Assurance,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+40,Samuel Young,L,Sci&Tech,Mkt&HR,Ya,2021,3.59,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+41,Leo Miller,L,Others,Mkt&HR,Ya,2021,2.95,Bekerja,9.0,9.3,S1,2020,Staf Penjualan,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+42,Alexander Wilson,L,Sci&Tech,Mkt&HR,Tidak,2021,3.29,Bekerja,4.0,9.9,S1,2020,Programmer,Teknologi Informasi dan Komunikasi,Cukup erat,Setingkat lebih tinggi
+43,Nathan Taylor,L,Sci&Tech,Mkt&Fin,Tidak,2021,3.99,Bekerja,2.0,3.5,S1,2019,Web Developer,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+44,Jessica Mitchell,P,Others,Mkt&Fin,Ya,2021,2.86,Bekerja,8.0,6.5,S1,2020,Customer Service,Jasa Lainnya,Cukup erat,Tingkat yang sama
+45,Michael Harris,L,Comm&Mgmt,Mkt&HR,Tidak,2021,3.8,Bekerja,8.0,10.1,S1,2020,Asisten Manajer,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+46,Olivia Harris,P,Sci&Tech,Mkt&Fin,Ya,2021,3.53,Bekerja,7.0,7.7,S1,2018,Staf Operasional,Jasa Lainnya,Erat,Setingkat lebih tinggi
+47,Julia Davis,P,Sci&Tech,Mkt&HR,Tidak,2021,3.82,Wirausaha/Startup,4.0,9.2,S1,2020,Pendiri Usaha,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+48,Laura Robinson,P,Comm&Mgmt,Mkt&HR,Ya,2022,3.07,Bekerja,9.0,7.0,S1,2021,Account Executive,"Manajemen, Administrasi, dan Penjualan",Erat,Tingkat yang sama
+49,Ryan Davis,L,Comm&Mgmt,Mkt&Fin,Tidak,2022,3.27,Bekerja,4.0,7.0,S1,2019,Asisten Manajer,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih tinggi
+50,Matthew Lewis,L,Others,Mkt&HR,Tidak,2022,3.84,Wirausaha/Startup,7.0,6.2,D3,2021,Pengelola Usaha,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+51,Isabella Brown,P,Comm&Mgmt,Mkt&Fin,Tidak,2022,3.47,Bekerja,2.0,8.5,D3,2022,Supervisor Penjualan,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+52,Sophia Carter,P,Sci&Tech,Mkt&Fin,Tidak,2022,2.69,Melanjutkan Studi,,,D3,2020,,,,
+53,David Foster,L,Sci&Tech,Mkt&HR,Ya,2022,3.87,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+54,Isabella Lewis,P,Others,Mkt&Fin,Tidak,2022,3.31,Bekerja,3.0,9.7,S1,2021,Staf Penjualan,Perdagangan dan Distribusi,Sangat erat,Setingkat lebih tinggi
+55,Oliver Young,L,Sci&Tech,Mkt&Fin,Tidak,2022,3.22,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+56,Isabella Brown,P,Others,Mkt&Fin,Tidak,2022,3.8,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+57,Chloe Wilson,P,Others,Mkt&HR,Ya,2022,3.99,Bekerja,7.0,7.3,S1,2021,Merchandiser,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+58,Rachel Johnson,P,Comm&Mgmt,Mkt&HR,Tidak,2022,3.35,Bekerja,5.0,7.2,S1,2019,Asisten Manajer,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+59,Ryan Young,L,Comm&Mgmt,Mkt&Fin,Tidak,2022,3.01,Wirausaha/Startup,9.0,10.4,D3,2021,Pendiri Usaha,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih tinggi
+60,Isabella Anderson,P,Sci&Tech,Mkt&Fin,Ya,2022,2.93,Bekerja,1.0,6.3,D3,2022,Programmer,Teknologi Informasi dan Komunikasi,Sangat erat,Setingkat lebih tinggi
+61,Daniel Mitchell,L,Comm&Mgmt,Mkt&HR,Tidak,2022,3.89,Wirausaha/Startup,5.0,9.7,S1,2019,Pendiri Usaha,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+62,Claire Lewis,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.28,Bekerja,2.0,6.0,S1,2020,Staf Akuntansi,Keuangan dan Asuransi,Cukup erat,Tingkat yang sama
+63,Emma Taylor,P,Others,Mkt&HR,Ya,2022,3.42,Bekerja,6.0,10.3,S1,2021,Staf Distribusi,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+64,Claire Young,P,Sci&Tech,Mkt&Fin,Tidak,2022,2.95,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018,,,,
+65,Isabella Bennett,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.76,Bekerja,5.0,8.8,S1,2020,Staf Operasional,Jasa Lainnya,Cukup erat,Tingkat yang sama
+66,Michael Williams,L,Sci&Tech,Mkt&HR,Tidak,2022,3.3,Belum Memungkinkan Bekerja,,,S1,2021,,,,
+67,Oliver Anderson,L,Others,Mkt&Fin,Tidak,2022,3.83,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+68,Hannah Miller,P,Comm&Mgmt,Mkt&Fin,Ya,2022,2.82,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020,,,,
+69,Emily Carter,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.58,Bekerja,6.0,9.1,D3,2022,Staf Akademik,Pendidikan,Cukup erat,Setingkat lebih tinggi
+70,Henry Johnson,L,Others,Mkt&HR,Tidak,2022,2.72,Bekerja,2.0,4.9,S1,2019,Kepala Toko,Perdagangan dan Distribusi,Cukup erat,Tingkat yang sama
+71,Rachel Walker,P,Others,Mkt&Fin,Tidak,2022,3.68,Bekerja,5.0,3.9,D3,2021,Staf Penjualan,Perdagangan dan Distribusi,Erat,Setingkat lebih tinggi
+72,Thomas Foster,L,Comm&Mgmt,Mkt&HR,Tidak,2022,3.99,Belum Memungkinkan Bekerja,,,S1,2021,,,,
+73,Oliver Wilson,L,Sci&Tech,Mkt&HR,Ya,2022,2.67,Melanjutkan Studi,,,S1,2018,,,,
+74,Charlotte Walker,P,Sci&Tech,Mkt&Fin,Tidak,2022,3.38,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2021,,,,
+75,William Thompson,L,Others,Mkt&HR,Tidak,2022,2.95,Bekerja,3.0,7.0,D3,2022,Staf Distribusi,Perdagangan dan Distribusi,Sangat erat,Setingkat lebih tinggi
+76,Jack Thompson,L,Sci&Tech,Mkt&HR,Tidak,2022,3.42,Bekerja,3.0,10.0,S1,2019,Web Developer,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+77,Jessica Miller,P,Sci&Tech,Mkt&HR,Tidak,2022,2.74,Belum Memungkinkan Bekerja,,,S1,2020,,,,
+78,Jessica Mitchell,P,Others,Mkt&HR,Tidak,2022,3.62,Wirausaha/Startup,1.0,3.3,S1,2021,Pemilik Usaha,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+79,Emma Young,P,Sci&Tech,Mkt&HR,Tidak,2022,2.81,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+80,Lucas Young,L,Sci&Tech,Mkt&HR,Tidak,2022,2.73,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+81,Megan Harris,P,Comm&Mgmt,Mkt&HR,Ya,2022,3.23,Wirausaha/Startup,5.0,4.8,S1,2021,Pemilik Usaha,"Manajemen, Administrasi, dan Penjualan",Erat,Tingkat yang sama
+82,Henry Foster,L,Comm&Mgmt,Mkt&HR,Ya,2022,3.76,Melanjutkan Studi,,,S1,2019,,,,
+83,Oliver Davis,L,Comm&Mgmt,Mkt&Fin,Ya,2022,2.98,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+84,David Moore,L,Sci&Tech,Mkt&Fin,Tidak,2022,3.92,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2022,,,,
+85,Benjamin Mitchell,L,Comm&Mgmt,Mkt&HR,Tidak,2022,3.27,Belum Memungkinkan Bekerja,,,D3,2020,,,,
+86,Samuel Johnson,L,Sci&Tech,Mkt&Fin,Tidak,2022,3.4,Bekerja,5.0,6.4,D3,2021,Quality Assurance,Teknologi Informasi dan Komunikasi,Sangat erat,Setingkat lebih tinggi
+87,Grace Johnson,P,Others,Mkt&Fin,Tidak,2022,3.95,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021,,,,
+88,Andrew Lewis,L,Sci&Tech,Mkt&HR,Tidak,2022,3.13,Bekerja,6.0,6.7,S1,2019,Analis Sistem,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+89,Julia Harris,P,Comm&Mgmt,Mkt&Fin,Ya,2023,2.69,Melanjutkan Studi,,,D3,2021,,,,
+90,Charlotte Moore,P,Comm&Mgmt,Mkt&HR,Ya,2023,2.6,Bekerja,5.0,10.5,S1,2021,Koordinator Pengiriman,Logistik dan Transportasi,Cukup erat,Tingkat yang sama
+91,Alexander Moore,L,Sci&Tech,Mkt&Fin,Ya,2023,3.9,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020,,,,
+92,Hannah Bennett,P,Sci&Tech,Mkt&HR,Ya,2023,3.78,Bekerja,8.0,6.9,S1,2020,Staf Ekspedisi,Logistik dan Transportasi,Tidak sama sekali,Tingkat yang sama
+93,James Moore,L,Comm&Mgmt,Mkt&HR,Tidak,2023,3.05,Bekerja,6.0,9.7,S1,2021,Staf Operasional,Jasa Lainnya,Kurang erat,Tingkat yang sama
+94,Hannah Taylor,P,Sci&Tech,Mkt&Fin,Tidak,2023,3.99,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+95,Daniel Miller,L,Sci&Tech,Mkt&Fin,Tidak,2023,3.85,Wirausaha/Startup,7.0,10.4,S1,2020,Pendiri Usaha,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+96,Grace Clark,P,Others,Mkt&HR,Tidak,2023,2.84,Bekerja,8.0,10.8,S1,2021,Staf Penjualan,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+97,William Thompson,L,Comm&Mgmt,Mkt&HR,Tidak,2023,3.2,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+98,Benjamin Carter,L,Others,Mkt&HR,Tidak,2023,3.84,Melanjutkan Studi,,,D3,2021,,,,
+99,Grace Davis,P,Comm&Mgmt,Mkt&HR,Tidak,2023,2.67,Bekerja,2.0,8.6,D3,2022,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Setingkat lebih tinggi
+100,Emma Taylor,P,Sci&Tech,Mkt&HR,Tidak,2023,2.62,Bekerja,10.0,6.6,S1,2018,Data Analyst,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+101,David Foster,L,Others,Mkt&HR,Tidak,2023,3.48,Melanjutkan Studi,,,S1,2019,,,,
+102,Charlotte Lewis,P,Comm&Mgmt,Mkt&Fin,Ya,2023,3.52,Bekerja,2.0,4.1,S1,2021,Instruktur Pelatihan,Pendidikan,Cukup erat,Setingkat lebih tinggi
+103,Thomas Lewis,L,Others,Mkt&Fin,Tidak,2023,3.38,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+104,Ethan Carter,L,Others,Mkt&Fin,Tidak,2023,3.69,Bekerja,7.0,3.5,S1,2019,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+105,Laura Anderson,P,Others,Mkt&HR,Tidak,2023,2.77,Bekerja,6.0,6.9,S1,2020,Merchandiser,Perdagangan dan Distribusi,Cukup erat,Tingkat yang sama
+106,Chloe Young,P,Others,Mkt&Fin,Tidak,2023,3.56,Bekerja,5.0,9.3,S1,2019,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Setingkat lebih tinggi
+107,David Davis,L,Comm&Mgmt,Mkt&HR,Tidak,2023,3.48,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020,,,,
+108,Benjamin Taylor,L,Comm&Mgmt,Mkt&Fin,Tidak,2023,3.12,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021,,,,
+109,Nathan Brown,L,Comm&Mgmt,Mkt&Fin,Tidak,2023,3.79,Bekerja,9.0,10.1,D3,2020,Staf Keuangan,Keuangan dan Asuransi,Tidak sama sekali,Tingkat yang sama
+110,Oliver Young,L,Comm&Mgmt,Mkt&Fin,Tidak,2023,3.19,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+111,Emily Bennett,P,Others,Mkt&Fin,Tidak,2023,2.63,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021,,,,
+112,Alexander Carter,L,Others,Mkt&HR,Ya,2023,3.33,Bekerja,4.0,7.1,D3,2020,Staf Gudang,Logistik dan Transportasi,Kurang erat,Setingkat lebih tinggi
+113,Andrew Williams,L,Others,Mkt&Fin,Tidak,2023,2.6,Wirausaha/Startup,6.0,10.1,S1,2020,Pengelola Usaha,Pendidikan,Cukup erat,Setingkat lebih tinggi
+114,Emma Mitchell,P,Comm&Mgmt,Mkt&HR,Tidak,2023,2.59,Bekerja,3.0,11.0,S1,2021,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+115,Isabella Young,P,Sci&Tech,Mkt&HR,Tidak,2023,3.55,Bekerja,5.0,7.5,D3,2020,Quality Assurance,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+116,Chloe Williams,P,Others,Mkt&HR,Tidak,2023,3.66,Wirausaha/Startup,2.0,10.7,S1,2019,Pengelola Usaha,Perdagangan dan Distribusi,Sangat erat,Setingkat lebih tinggi
+117,Matthew Brown,L,Others,Mkt&Fin,Ya,2023,3.01,Bekerja,2.0,5.3,S1,2020,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+118,Charlotte Brown,P,Comm&Mgmt,Mkt&HR,Tidak,2023,2.54,Bekerja,3.0,4.5,S1,2019,Operator Produksi,Produksi dan Industri,Kurang erat,Setingkat lebih tinggi
+119,Leo Clark,L,Sci&Tech,Mkt&HR,Tidak,2023,3.25,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020,,,,
+120,Daniel Young,L,Others,Mkt&Fin,Tidak,2023,2.59,Melanjutkan Studi,,,S1,2021,,,,
+121,Megan Moore,P,Sci&Tech,Mkt&HR,Tidak,2023,2.62,Bekerja,2.0,8.2,S1,2019,Quality Assurance,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+122,Andrew Young,L,Sci&Tech,Mkt&Fin,Tidak,2023,3.01,Belum Memungkinkan Bekerja,,,S1,2020,,,,
+123,Jessica Johnson,P,Others,Mkt&HR,Ya,2023,3.51,Bekerja,2.0,4.0,D3,2022,Staf Penjualan,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+124,Sophia Carter,P,Others,Mkt&HR,Tidak,2023,2.67,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+125,Natalie Foster,P,Comm&Mgmt,Mkt&HR,Tidak,2023,2.7,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2021,,,,
+126,William Walker,L,Others,Mkt&Fin,Ya,2023,3.07,Bekerja,7.0,5.0,S1,2021,Staf Distribusi,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+127,Benjamin Foster,L,Sci&Tech,Mkt&Fin,Ya,2023,3.85,Bekerja,10.0,4.3,S1,2019,Data Analyst,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+128,Matthew Foster,L,Comm&Mgmt,Mkt&HR,Tidak,2023,2.99,Bekerja,4.0,10.7,D3,2021,Staf Administrasi,"Manajemen, Administrasi, dan Penjualan",Cukup erat,Tingkat yang sama
+129,Amanda Mitchell,P,Others,Mkt&HR,Tidak,2023,3.84,Melanjutkan Studi,,,D3,2022,,,,
+130,Leo Foster,L,Sci&Tech,Mkt&HR,Tidak,2023,3.29,Bekerja,4.0,4.1,S1,2019,Quality Assurance,Teknologi Informasi dan Komunikasi,Erat,Setingkat lebih tinggi
+131,Charlotte Robinson,P,Comm&Mgmt,Mkt&Fin,Ya,2024,3.58,Bekerja,9.0,7.6,D3,2021,Asisten Manajer,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih tinggi
+132,Claire Walker,P,Others,Mkt&Fin,Tidak,2024,2.9,Bekerja,5.0,9.9,S1,2020,Kepala Toko,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+133,Julia Clark,P,Sci&Tech,Mkt&Fin,Ya,2024,3.03,Bekerja,4.0,8.0,S1,2019,Web Developer,Teknologi Informasi dan Komunikasi,Sangat erat,Setingkat lebih rendah
+134,Henry Miller,L,Sci&Tech,Mkt&HR,Ya,2024,3.22,Bekerja,5.0,8.4,S1,2020,Programmer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+135,Olivia Thompson,P,Others,Mkt&Fin,Tidak,2024,3.16,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021,,,,
+136,Ethan Anderson,L,Others,Mkt&HR,Tidak,2024,3.63,Melanjutkan Studi,,,D3,2020,,,,
+137,Amelia Wilson,P,Sci&Tech,Mkt&Fin,Ya,2024,3.02,Bekerja,6.0,5.9,S1,2019,Programmer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+138,Michael Mitchell,L,Others,Mkt&HR,Tidak,2024,3.4,Melanjutkan Studi,,,S1,2021,,,,
+139,Hannah Bennett,P,Sci&Tech,Mkt&Fin,Tidak,2024,2.96,Bekerja,2.0,5.3,S1,2018,Web Developer,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+140,Chloe Harris,P,Others,Mkt&Fin,Tidak,2024,2.81,Bekerja,3.0,7.6,D3,2021,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+141,Olivia Taylor,P,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.69,Belum Memungkinkan Bekerja,,,S1,2021,,,,
+142,Rachel Williams,P,Sci&Tech,Mkt&HR,Tidak,2024,3.19,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+143,Andrew Carter,L,Others,Mkt&Fin,Tidak,2024,2.63,Bekerja,1.0,10.0,S1,2019,Merchandiser,Perdagangan dan Distribusi,Erat,Setingkat lebih tinggi
+144,Henry Robinson,L,Sci&Tech,Mkt&Fin,Tidak,2024,3.3,Bekerja,4.0,9.3,S1,2021,Analis Sistem,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+145,Rachel Wilson,P,Sci&Tech,Mkt&HR,Tidak,2024,2.77,Melanjutkan Studi,,,S1,2019,,,,
+146,William Brown,L,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.92,Belum Memungkinkan Bekerja,,,S1,2020,,,,
+147,Claire Anderson,P,Sci&Tech,Mkt&Fin,Tidak,2024,3.52,Wirausaha/Startup,5.0,10.9,S1,2021,Pengelola Usaha,Produksi dan Industri,Cukup erat,Tingkat yang sama
+148,Alexander Clark,L,Sci&Tech,Mkt&HR,Tidak,2024,3.55,Bekerja,3.0,9.3,S1,2019,Quality Assurance,Teknologi Informasi dan Komunikasi,Cukup erat,Setingkat lebih tinggi
+149,Ryan Williams,L,Sci&Tech,Mkt&Fin,Tidak,2024,2.64,Melanjutkan Studi,,,S1,2020,,,,
+150,Alexander Johnson,L,Others,Mkt&HR,Ya,2024,2.64,Bekerja,1.0,9.5,D3,2022,Merchandiser,Perdagangan dan Distribusi,Erat,Setingkat lebih tinggi
+151,Alexander Moore,L,Sci&Tech,Mkt&Fin,Ya,2024,3.38,Bekerja,3.0,9.1,S1,2018,Staf IT Support,Teknologi Informasi dan Komunikasi,Cukup erat,Setingkat lebih tinggi
+152,William Young,L,Sci&Tech,Mkt&HR,Tidak,2024,3.08,Bekerja,1.0,6.7,S1,2019,Programmer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+153,Sophia Brown,P,Sci&Tech,Mkt&Fin,Tidak,2024,3.29,Bekerja,3.0,10.8,D3,2022,Staf IT Support,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+154,Victoria Lewis,P,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.72,Bekerja,2.0,8.4,S1,2019,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+155,Sarah Carter,P,Comm&Mgmt,Mkt&HR,Tidak,2024,2.59,Bekerja,6.0,9.9,D3,2021,Supervisor Penjualan,"Manajemen, Administrasi, dan Penjualan",Cukup erat,Setingkat lebih tinggi
+156,Rachel Brown,P,Sci&Tech,Mkt&HR,Tidak,2024,3.66,Belum Memungkinkan Bekerja,,,S1,2021,,,,
+157,Victoria Lewis,P,Sci&Tech,Mkt&Fin,Ya,2024,3.63,Belum Memungkinkan Bekerja,,,S1,2019,,,,
+158,Charlotte Foster,P,Others,Mkt&HR,Ya,2024,3.36,Melanjutkan Studi,,,S1,2020,,,,
+159,Jessica Thompson,P,Others,Mkt&Fin,Tidak,2024,3.97,Melanjutkan Studi,,,S1,2021,,,,
+160,Ethan Young,L,Sci&Tech,Mkt&HR,Tidak,2024,3.25,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2018,,,,
+161,Leo Mitchell,L,Sci&Tech,Mkt&Fin,Ya,2024,3.93,Bekerja,3.0,6.9,D3,2021,Staf Gudang,Logistik dan Transportasi,Cukup erat,Tingkat yang sama
+162,Oliver Walker,L,Others,Mkt&HR,Ya,2024,3.85,Belum Memungkinkan Bekerja,,,S1,2020,,,,
+163,William Lewis,L,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.57,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020,,,,
+164,Daniel Taylor,L,Sci&Tech,Mkt&HR,Tidak,2024,3.95,Wirausaha/Startup,10.0,4.2,D3,2021,Pengelola Usaha,Teknologi Informasi dan Komunikasi,Erat,Setingkat lebih tinggi
+165,Lucas Davis,L,Others,Mkt&HR,Ya,2024,3.85,Melanjutkan Studi,,,S1,2021,,,,
+166,Ryan Taylor,L,Comm&Mgmt,Mkt&HR,Ya,2024,3.74,Bekerja,2.0,4.1,S1,2019,Account Executive,"Manajemen, Administrasi, dan Penjualan",Erat,Tingkat yang sama
+167,Sophia Walker,P,Sci&Tech,Mkt&Fin,Tidak,2024,3.54,Bekerja,6.0,3.3,S1,2019,Admin Logistik,Logistik dan Transportasi,Tidak sama sekali,Tingkat yang sama
+168,Benjamin Walker,L,Comm&Mgmt,Mkt&Fin,Ya,2024,3.62,Bekerja,4.0,3.4,S1,2020,Staf HRD,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih rendah
+169,Sarah Harris,P,Comm&Mgmt,Mkt&HR,Tidak,2024,3.43,Bekerja,4.0,6.2,S1,2019,Asisten Manajer,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+170,Alexander Davis,L,Comm&Mgmt,Mkt&HR,Tidak,2024,3.63,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2019,,,,
+171,Ryan Robinson,L,Comm&Mgmt,Mkt&Fin,Tidak,2024,3.98,Bekerja,8.0,3.9,S1,2021,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Erat,Tingkat yang sama
+172,Leo Mitchell,L,Comm&Mgmt,Mkt&Fin,Tidak,2024,2.77,Bekerja,3.0,6.4,S1,2019,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+173,Joseph Carter,L,Sci&Tech,Mkt&HR,Ya,2025,2.62,Bekerja,2.0,3.9,S1,2020,Programmer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+174,Olivia Moore,P,Sci&Tech,Mkt&HR,Tidak,2025,3.36,Bekerja,1.0,8.6,S1,2020,Administrator Jaringan,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+175,Isabella Brown,P,Others,Mkt&HR,Ya,2025,3.93,Bekerja,5.0,7.9,D3,2020,Teller,Keuangan dan Asuransi,Kurang erat,Tingkat yang sama
+176,Julia Wilson,P,Others,Mkt&Fin,Tidak,2025,2.54,Bekerja,9.0,8.4,D3,2021,Staf Penjualan,Perdagangan dan Distribusi,Sangat erat,Setingkat lebih tinggi
+177,Jessica Mitchell,P,Comm&Mgmt,Mkt&HR,Tidak,2025,3.25,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2021,,,,
+178,Benjamin Taylor,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,2.57,Bekerja,1.0,9.4,S1,2018,Operator Produksi,Produksi dan Industri,Kurang erat,Tingkat yang sama
+179,Chloe Johnson,P,Others,Mkt&Fin,Tidak,2025,3.05,Bekerja,4.0,4.0,S1,2019,Merchandiser,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+180,Julia Carter,P,Others,Mkt&Fin,Tidak,2025,2.84,Melanjutkan Studi,,,S1,2021,,,,
+181,William Young,L,Others,Mkt&HR,Ya,2025,3.94,Bekerja,10.0,8.4,S1,2018,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+182,Leo Davis,L,Others,Mkt&Fin,Tidak,2025,3.71,Bekerja,5.0,6.7,S1,2019,Staf Distribusi,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+183,Nathan Harris,L,Others,Mkt&Fin,Ya,2025,2.96,Bekerja,7.0,4.0,S1,2021,Operator Produksi,Produksi dan Industri,Tidak sama sekali,Setingkat lebih tinggi
+184,Natalie Anderson,P,Comm&Mgmt,Mkt&HR,Ya,2025,3.36,Melanjutkan Studi,,,S1,2019,,,,
+185,Emily Johnson,P,Others,Mkt&Fin,Ya,2025,3.62,Bekerja,8.0,3.2,S1,2019,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+186,Matthew Walker,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.16,Melanjutkan Studi,,,S1,2021,,,,
+187,Thomas Harris,L,Others,Mkt&Fin,Ya,2025,3.65,Bekerja,8.0,7.2,S1,2019,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tidak perlu pendidikan tinggi
+188,Julia Harris,P,Comm&Mgmt,Mkt&HR,Tidak,2025,2.54,Bekerja,1.0,5.0,D3,2021,Staf HRD,"Manajemen, Administrasi, dan Penjualan",Erat,Setingkat lebih tinggi
+189,Natalie Bennett,P,Sci&Tech,Mkt&Fin,Tidak,2025,3.22,Bekerja,5.0,3.3,S1,2021,Data Analyst,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+190,Lucas Clark,L,Sci&Tech,Mkt&Fin,Ya,2025,2.94,Melanjutkan Studi,,,S1,2019,,,,
+191,Samuel Thompson,L,Others,Mkt&Fin,Tidak,2025,2.93,Melanjutkan Studi,,,S1,2019,,,,
+192,Sarah Williams,P,Others,Mkt&HR,Ya,2025,3.56,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2022,,,,
+193,Nathan Walker,L,Comm&Mgmt,Mkt&HR,Ya,2025,3.81,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020,,,,
+194,Jessica Anderson,P,Sci&Tech,Mkt&HR,Tidak,2025,3.12,Bekerja,2.0,8.0,S1,2019,Staf IT Support,Teknologi Informasi dan Komunikasi,Sangat erat,Setingkat lebih tinggi
+195,Matthew Walker,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,3.68,Melanjutkan Studi,,,D3,2022,,,,
+196,Julia Taylor,P,Comm&Mgmt,Mkt&Fin,Tidak,2025,2.69,Tidak Bekerja tetapi Sedang Mencari Kerja,,,D3,2020,,,,
+197,Alexander Robinson,L,Comm&Mgmt,Mkt&HR,Tidak,2025,2.63,Bekerja,7.0,3.8,S1,2020,Staf Pemasaran,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+198,Claire Wilson,P,Sci&Tech,Mkt&HR,Tidak,2025,2.91,Bekerja,5.0,4.0,S1,2020,Programmer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+199,Amanda Wilson,P,Sci&Tech,Mkt&HR,Tidak,2025,3.43,Bekerja,8.0,3.0,D3,2020,Web Developer,Teknologi Informasi dan Komunikasi,Erat,Setingkat lebih tinggi
+200,Laura Robinson,P,Sci&Tech,Mkt&HR,Tidak,2025,3.89,Belum Memungkinkan Bekerja,,,S1,2020,,,,
+201,Julia Lewis,P,Comm&Mgmt,Mkt&HR,Tidak,2025,3.5,Bekerja,7.0,4.3,S1,2020,Account Executive,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+202,Laura Wilson,P,Others,Mkt&HR,Tidak,2025,2.77,Bekerja,3.0,8.2,S1,2018,Staf Distribusi,Perdagangan dan Distribusi,Erat,Tingkat yang sama
+203,Amelia Bennett,P,Comm&Mgmt,Mkt&Fin,Tidak,2025,2.6,Bekerja,3.0,6.3,S1,2020,Staf Administrasi,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Setingkat lebih tinggi
+204,Lucas Anderson,L,Comm&Mgmt,Mkt&Fin,Ya,2025,3.06,Bekerja,1.0,7.1,D3,2022,Staf HRD,"Manajemen, Administrasi, dan Penjualan",Sangat erat,Tingkat yang sama
+205,Rachel Mitchell,P,Others,Mkt&Fin,Tidak,2025,3.32,Bekerja,5.0,9.6,D3,2020,Kepala Toko,Perdagangan dan Distribusi,Sangat erat,Tingkat yang sama
+206,Chloe Taylor,P,Comm&Mgmt,Mkt&HR,Tidak,2025,3.05,Bekerja,8.0,8.3,D3,2021,Analis Kredit,Keuangan dan Asuransi,Tidak sama sekali,Setingkat lebih tinggi
+207,Leo Walker,L,Comm&Mgmt,Mkt&Fin,Tidak,2025,2.96,Bekerja,3.0,9.0,D3,2022,Staf HRD,"Manajemen, Administrasi, dan Penjualan",Erat,Tingkat yang sama
+208,Samuel Anderson,L,Sci&Tech,Mkt&Fin,Tidak,2025,3.34,Bekerja,4.0,10.9,S1,2019,Web Developer,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+209,Michael Wilson,L,Sci&Tech,Mkt&Fin,Ya,2025,3.51,Melanjutkan Studi,,,D3,2021,,,,
+210,David Williams,L,Sci&Tech,Mkt&HR,Tidak,2025,3.97,Bekerja,2.0,8.2,S1,2021,Web Developer,Teknologi Informasi dan Komunikasi,Sangat erat,Tingkat yang sama
+211,Samuel Thompson,L,Sci&Tech,Mkt&HR,Tidak,2025,3.77,Wirausaha/Startup,5.0,6.7,S1,2019,Pemilik Usaha,Teknologi Informasi dan Komunikasi,Erat,Tingkat yang sama
+212,Jack Taylor,L,Sci&Tech,Mkt&HR,Ya,2025,2.95,Melanjutkan Studi,,,S1,2020,,,,
+213,Amanda Lewis,P,Others,Mkt&Fin,Ya,2025,3.96,Bekerja,2.0,8.1,D3,2022,Staf Distribusi,Perdagangan dan Distribusi,Cukup erat,Setingkat lebih tinggi
+214,William Young,L,Others,Mkt&HR,Tidak,2025,3.08,Belum Memungkinkan Bekerja,,,S1,2018,,,,
+215,Claire Williams,P,Comm&Mgmt,Mkt&Fin,Tidak,2025,2.8,Tidak Bekerja tetapi Sedang Mencari Kerja,,,S1,2020,,,,
