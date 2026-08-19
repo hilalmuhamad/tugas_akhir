@@ -2,14 +2,9 @@ import { MessageSquareText, CheckCircle2, BarChart3, ClipboardList } from "lucid
 
 const FEATURES = [
   {
-    icon: MessageSquareText,
-    title: "Pencarian bahasa alami",
-    desc: "Alumni cukup mengetik dengan kata-kata sendiri, tanpa dropdown atau filter yang rumit.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Skor kemiripan & keahlian",
-    desc: "Setiap hasil pencarian menampilkan skor kemiripan lowongan beserta daftar keahlian yang diharapkan.",
+    icon: ClipboardList,
+    title: "Kuisioner tracer study",
+    desc: "Alumni mengisi data karier singkat: status bekerja, masa tunggu, kesesuaian bidang, dan rentang gaji.",
   },
   {
     icon: BarChart3,
@@ -17,9 +12,14 @@ const FEATURES = [
     desc: "Rekapitulasi data karier alumni per program studi, tahun lulus, dan status kerja.",
   },
   {
-    icon: ClipboardList,
-    title: "Kuisioner terintegrasi",
-    desc: "Data tracer study yang diisi alumni langsung melengkapi basis analitik kampus.",
+    icon: CheckCircle2,
+    title: "Kesesuaian bidang terukur",
+    desc: "Perbandingan bidang pekerjaan dengan latar belakang prodi dihitung otomatis per lulusan.",
+  },
+  {
+    icon: MessageSquareText,
+    title: "Data terpusat satu gudang",
+    desc: "Jawaban kuisioner dirapikan ke data warehouse agar mudah dianalisis kampus.",
   },
 ];
 

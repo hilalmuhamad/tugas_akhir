@@ -5,11 +5,10 @@ import {
   GraduationCap,
   CalendarDays,
   Briefcase,
-  Search,
   LayoutDashboard,
 } from 'lucide-react';
 import api from '../../../services/api';
-import CareerNavbar from '../../career/components/CareerNavbar';
+import AlumniNavbar from '../components/AlumniNavbar';
 import { prodiLabel } from '../../../utils/prodiLabel';
 
 const STATUS_LABEL = {
@@ -107,7 +106,7 @@ export default function KuisionerSuccessPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
-      <CareerNavbar />
+      <AlumniNavbar />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6">
         {loading ? (
@@ -173,10 +172,10 @@ export default function KuisionerSuccessPage() {
                 <LayoutDashboard className="h-4 w-4" /> Kembali ke Dashboard
               </Link>
               <Link
-                to="/jobs"
+                to="/profile"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-blue-600 bg-white px-4 py-2.5 text-sm font-semibold text-blue-600 transition hover:bg-blue-50"
               >
-                <Search className="h-4 w-4" /> Cari Lowongan Kerja
+                <GraduationCap className="h-4 w-4" /> Lihat Profil Saya
               </Link>
             </div>
           </>

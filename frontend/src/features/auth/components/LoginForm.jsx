@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useAuthStore } from '../store/authStore';
-import { getHistory } from '../../career/services/careerApi';
 
 export default function LoginForm() {
   const { login, loading, error } = useAuthStore();
@@ -11,12 +10,7 @@ export default function LoginForm() {
     e.preventDefault();
     const result = await login(email, password);
     if (result.ok) {
-      try {
-        const { data } = await getHistory();
-        window.location.href = data.length > 0 ? `/chat/${data[0].id}` : '/analyze';
-      } catch {
-        window.location.href = '/analyze';
-      }
+      window.location.href = '/dashboard';
     }
   };
 

@@ -11,6 +11,7 @@ import DashboardPage from './features/dashboard/pages/DashboardPage.jsx';
 import KuisionerPage from './features/dashboard/pages/KuisionerPage.jsx';
 import KuisionerSuccessPage from './features/dashboard/pages/KuisionerSuccessPage.jsx';
 import LaporanPage from './features/dashboard/pages/LaporanPage.jsx';
+import ProfilePage from './features/dashboard/pages/ProfilePage.jsx';
 
 function App() {
   return (
@@ -21,6 +22,14 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route
           path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/alumni"
           element={
             <ProtectedRoute>
               <DashboardPage />
@@ -48,6 +57,14 @@ function App() {
           element={
             <ProtectedRoute>
               <KuisionerSuccessPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />

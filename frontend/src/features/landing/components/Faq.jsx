@@ -4,19 +4,19 @@ import { ChevronDown } from "lucide-react";
 const ITEMS = [
   {
     q: "Apakah platform ini gratis untuk alumni?",
-    a: "Ya, pengisian kuisioner dan pencarian kerja tidak dipungut biaya.",
+    a: "Ya, pengisian kuisioner tracer study tidak dipungut biaya.",
   },
   {
     q: "Apakah tersedia untuk semua program studi?",
-    a: "Saat ini mencakup empat program studi di bawah kampus dan dapat diperluas ke depannya.",
+    a: "Saat ini mencakup program studi di bawah kampus dan dapat diperluas ke depannya.",
   },
   {
     q: "Bagaimana keamanan data alumni?",
-    a: "Data hanya digunakan untuk pencocokan kerja dan analitik internal kampus.",
+    a: "Data hanya digunakan untuk analitik internal kampus dan tidak dibagikan ke pihak lain.",
   },
   {
-    q: "Dari mana data lowongan kerja berasal?",
-    a: "Lowongan kerja tersimpan sebagai data nyata di basis data sistem, dikelola oleh admin, dan diperbarui dari sumber publik yang tersedia.",
+    q: "Apa yang terjadi setelah kuisioner diisi?",
+    a: "Jawaban alumni diproses ke data warehouse, lalu disajikan sebagai statistik karier di dashboard kampus.",
   },
 ];
 

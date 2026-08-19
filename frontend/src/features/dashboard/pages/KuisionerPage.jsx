@@ -1,47 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClipboardList, AlertCircle, GraduationCap } from 'lucide-react';
+import { ClipboardList, AlertCircle, GraduationCap, RefreshCw } from 'lucide-react';
 import { useAuthStore } from '../../auth/store/authStore';
 import api from '../../../services/api';
-import CareerNavbar from '../../career/components/CareerNavbar';
+import { getKuisionerOptions } from '../services/tracerStudyApi';
+import AlumniNavbar from '../components/AlumniNavbar';
 
-const PROGRAM_STUDI_OPTIONS = [
-  { value: 'Sci&Tech', label: 'Teknik Informatika' },
-  { value: 'Comm&Mgmt', label: 'Manajemen' },
-  { value: 'Others', label: 'Akuntansi' },
-];
-const SPECIALISASI_OPTIONS = ['Mkt&HR', 'Data Analytics', 'Software Dev', 'Other'];
-const STATUS_BEKERJA_OPTIONS = [
-  'Bekerja',
-  'Wirausaha/Startup',
-  'Melanjutkan Studi',
-  'Belum Bekerja',
-  'Belum Memungkinkan Bekerja',
-];
-const BIDANG_PEKERJAAN_OPTIONS = [
-  'Teknologi Informasi dan Komunikasi',
-  'Manajemen, Administrasi, dan Penjualan',
-  'Logistik dan Transportasi',
-  'Keuangan dan Asuransi',
-  'Pendidikan',
-  'Produksi dan Industri',
-  'Perdagangan dan Distribusi',
-  'Jasa Lainnya',
-];
-const KESESUAIAN_BIDANG_OPTIONS = [
-  'Sangat erat',
-  'Erat',
-  'Cukup erat',
-  'Kurang erat',
-  'Tidak sama sekali',
-];
-const TINGKAT_PENDIDIKAN_OPTIONS = [
-  'Setingkat lebih tinggi',
-  'Tingkat yang sama',
-  'Setingkat lebih rendah',
-  'Tidak perlu pendidikan tinggi',
-];
-const STATUS_BEKERJA_KEJA = ['Bekerja', 'Wirausaha/Startup'];
+/*
+ * Kuisioner API-driven: seluruh opsi isian (program studi, specialisasi,
+ * status bekerja, bidang pekerjaan, kesesuaian bidang) diambil dari API
+ * OLAP PostgreSQL (lihat getKuisionerOptions di tracerStudyApi.js).
+ * Tidak ada konstanta hardcode di frontend.
+ *
+ * Catatan kesesuaian dengan backend:
+ *  - gender    : L/P (validasi API /api/profile: in:L,P)
+ *  - jenjang   : D3/S1 (validasi API: in:D3,S1)
+ *  - pengalaman: Ya/Tidak (validasi API: in:Ya,Tidak)
+ *  - status bekerja: hanya nilai yang benar-benar ada di PostgreSQL
+ *    (saat ini "Bekerja" & "Tidak Bekerja"; "Wirausaha/Startup"
+ *    dihilangkan karena tidak ada di data OLAP)
+ *  - tingkatPendidikanSesuai: TIDAK dikirim/ditampilkan — kolomnya
+ *    tidak ada di PostgreSQL (schema PG tidak mengikuti migration)
+ */
 
 const EMPTY_FORM = {
   nama: '',
@@ -60,22 +40,33 @@ const EMPTY_FORM = {
   jabatan: '',
   bidangPekerjaan: '',
   kesesuaianBidang: '',
-  tingkatPendidikanSesuai: '',
 };
 
 export default function KuisionerPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const [form, setForm] = useState(EMPTY_FORM);
+  const [options, setOptions] = useState(null);
+  const [optionsError, setOptionsError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
   const canFillKuisioner = user?.role === 'alumni' || user?.role === 'admin';
 
+  const loadOptions = async () => {
+    setOptionsError(null);
+    try {
+      setOptions(await getKuisionerOptions());
+    } catch {
+      setOptionsError('Gagal memuat opsi isian dari API OLAP PostgreSQL.');
+    }
+  };
+
   useEffect(() => {
     let active = true;
     (async () => {
+      await loadOptions();
       try {
         const { data } = await api.get('/profile');
         if (data && active) {
@@ -96,7 +87,6 @@ export default function KuisionerPage() {
             jabatan: data.jabatan ?? '',
             bidangPekerjaan: data.bidangPekerjaan ?? '',
             kesesuaianBidang: data.kesesuaianBidang ?? '',
-            tingkatPendidikanSesuai: data.tingkatPendidikanSesuai ?? '',
           });
         }
       } catch {
@@ -108,22 +98,22 @@ export default function KuisionerPage() {
     return () => {
       active = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const setField = (field, value) => setForm((f) => ({ ...f, [field]: value }));
 
-  const isWorking = STATUS_BEKERJA_KEJA.includes(form.statusBekerja);
+  const isWorking = form.statusBekerja === 'Bekerja';
 
   const handleStatusBekerjaChange = (value) => {
     setForm((f) => {
       const next = { ...f, statusBekerja: value };
-      if (!STATUS_BEKERJA_KEJA.includes(value)) {
-        // Keselarasan kerja hanya relevan untuk yang sudah bekerja/wirausaha;
+      if (value !== 'Bekerja') {
+        // Keselarasan kerja hanya relevan untuk yang sudah bekerja;
         // dikosongkan agar tidak terkirim ke backend.
         next.jabatan = '';
         next.bidangPekerjaan = '';
         next.kesesuaianBidang = '';
-        next.tingkatPendidikanSesuai = '';
       }
       return next;
     });
@@ -155,8 +145,6 @@ export default function KuisionerPage() {
       if (payload.gajiJuta !== '') payload.gajiJuta = Number(payload.gajiJuta);
       delete payload.masaTungguBulan;
       const { data } = await api.post('/profile', payload);
-      // Setelah tersimpan, pindah ke halaman konfirmasi — form tidak
-      // ditampilkan lagi.
       navigate('/kuisioner/sukses', {
         replace: true,
         state: {
@@ -180,9 +168,20 @@ export default function KuisionerPage() {
     'w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100';
   const labelCls = 'mb-1.5 block text-sm font-medium text-slate-700';
 
+  const renderOptions = (values) => {
+    if (!values?.length) {
+      return <option value="">-- Tidak ada data dari API --</option>;
+    }
+    return values.map((opt) => (
+      <option key={opt} value={opt}>
+        {opt}
+      </option>
+    ));
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
-      <CareerNavbar />
+      <AlumniNavbar />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-6">
         {!canFillKuisioner ? (
@@ -200,11 +199,25 @@ export default function KuisionerPage() {
                 <ClipboardList className="h-5 w-5" /> Kuisioner Alumni
               </h1>
               <p className="mt-1 text-sm text-blue-100">
-                Isi data sesuai format tracer study. Data akan disimpan ke database dan
-                diproses dengan Random Forest (lulus tepat waktu / tidak tepat waktu
-                sesuai jenjang D3 = 3 tahun, S1 = 4 tahun).
+                Isi data sesuai tracer study. Seluruh opsi isian diambil langsung
+                dari API OLAP PostgreSQL.
               </p>
             </div>
+
+            {optionsError && (
+              <div className="mt-4 flex items-center justify-between gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                <span className="flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0" /> {optionsError}
+                </span>
+                <button
+                  type="button"
+                  onClick={loadOptions}
+                  className="flex items-center gap-1 rounded-lg border border-amber-300 px-2.5 py-1 text-xs font-medium hover:bg-amber-100"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" /> Muat Ulang
+                </button>
+              </div>
+            )}
 
             {error && (
               <div className="mt-4 flex items-center gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
@@ -216,8 +229,10 @@ export default function KuisionerPage() {
               onSubmit={handleSubmit}
               className="mt-4 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6"
             >
-              {loading ? (
-                <p className="py-8 text-center text-sm text-slate-400">Memuat kuisioner...</p>
+              {loading || !options ? (
+                <p className="py-8 text-center text-sm text-slate-400">
+                  {loading ? 'Memuat kuisioner...' : 'Memuat opsi dari API OLAP...'}
+                </p>
               ) : (
                 <>
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -264,11 +279,7 @@ export default function KuisionerPage() {
                         required
                       >
                         <option value="">-- Pilih --</option>
-                        {PROGRAM_STUDI_OPTIONS.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
+                        {renderOptions(options.programStudi)}
                       </select>
                     </div>
 
@@ -281,11 +292,7 @@ export default function KuisionerPage() {
                         required
                       >
                         <option value="">-- Pilih --</option>
-                        {SPECIALISASI_OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
+                        {renderOptions(options.specialisasi)}
                       </select>
                     </div>
 
@@ -357,11 +364,7 @@ export default function KuisionerPage() {
                         required
                       >
                         <option value="">-- Pilih --</option>
-                        {STATUS_BEKERJA_OPTIONS.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
-                        ))}
+                        {renderOptions(options.statusBekerja)}
                       </select>
                     </div>
 
@@ -435,11 +438,7 @@ export default function KuisionerPage() {
                             required
                           >
                             <option value="">-- Pilih --</option>
-                            {BIDANG_PEKERJAAN_OPTIONS.map((opt) => (
-                              <option key={opt} value={opt}>
-                                {opt}
-                              </option>
-                            ))}
+                            {renderOptions(options.bidangPekerjaan)}
                           </select>
                         </div>
 
@@ -449,7 +448,7 @@ export default function KuisionerPage() {
                             saat ini?
                           </label>
                           <div className="grid gap-2 sm:grid-cols-3">
-                            {KESESUAIAN_BIDANG_OPTIONS.map((opt) => (
+                            {options.hubunganBidang?.map((opt) => (
                               <label
                                 key={opt}
                                 className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
@@ -470,38 +469,9 @@ export default function KuisionerPage() {
                                 {opt}
                               </label>
                             ))}
-                          </div>
-                        </div>
-
-                        <div className="sm:col-span-2">
-                          <label className={labelCls}>
-                            Menurut Anda, tingkat pendidikan apa yang paling sesuai untuk
-                            pekerjaan Anda saat ini?
-                          </label>
-                          <div className="grid gap-2 sm:grid-cols-2">
-                            {TINGKAT_PENDIDIKAN_OPTIONS.map((opt) => (
-                              <label
-                                key={opt}
-                                className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
-                                  form.tingkatPendidikanSesuai === opt
-                                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                    : 'border-slate-200 text-slate-600 hover:border-blue-300'
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name="tingkatPendidikanSesuai"
-                                  className="accent-blue-600"
-                                  value={opt}
-                                  checked={form.tingkatPendidikanSesuai === opt}
-                                  onChange={(e) =>
-                                    setField('tingkatPendidikanSesuai', e.target.value)
-                                  }
-                                  required
-                                />
-                                {opt}
-                              </label>
-                            ))}
+                            {!options.hubunganBidang?.length && (
+                              <p className="text-sm text-slate-400">-- Tidak ada data dari API --</p>
+                            )}
                           </div>
                         </div>
                       </>

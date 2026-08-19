@@ -5,9 +5,9 @@ import { getHistory } from "../../career/services/careerApi";
 import { useAuthStore } from "../../auth/store/authStore";
 
 const LINKS = [
-  { href: "#fitur", label: "Fitur" },
-  { href: "#cara-kerja", label: "Cara kerja" },
-  { href: "#pratinjau-olap", label: "Dashboard" },
+  { href: "#fitur", label: "Fitur tracer study" },
+  { href: "#cara-kerja", label: "Alur kerja" },
+  { href: "#pratinjau-olap", label: "Statistik" },
   { href: "#faq", label: "FAQ" },
 ];
 
@@ -131,8 +131,8 @@ export default function Navbar() {
               Masuk
             </Link>
           )}
-          <a href="#cari" className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
-            Coba sekarang
+          <a href="/login" className="rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
+            Isi Kuisioner
           </a>
         </div>
         <button

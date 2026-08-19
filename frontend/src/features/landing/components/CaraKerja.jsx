@@ -6,13 +6,13 @@ const STEPS = [
   },
   {
     n: "02",
-    title: "Ceritakan yang Anda cari",
-    desc: "Ketik dengan bahasa sendiri: keahlian, lokasi, dan preferensi kerja.",
+    title: "Data diolah ke data warehouse",
+    desc: "Jawaban kuisioner dibersihkan dan disusun ke skema OLAP untuk dianalisis.",
   },
   {
     n: "03",
-    title: "Terima hasil urut skor kemiripan",
-    desc: "Setiap lowongan tampil dengan skor kemiripan dan daftar keahlian yang diharapkan.",
+    title: "Lihat statistik karier alumni",
+    desc: "Status bekerja, masa tunggu, dan kesesuaian bidang tampil dalam dashboard kampus.",
   },
 ];
 
@@ -25,9 +25,8 @@ export default function CaraKerja() {
             Cara kerja
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slate-500 md:text-lg">
-            Pencarian kerja konvensional memaksa alumni menyaring filter yang rumit, sementara data
-            tracer study kampus tersebar. Smart Career Matching menyatukan keduanya dalam satu alur
-            yang sederhana.
+            Data tracer study kampus tersebar di berbagai sumber. Sistem ini mengumpulkan jawaban
+            alumni dalam satu gudang data, lalu menyajikan statistik karier secara terpusat.
           </p>
         </div>
         <div className="mt-16 grid gap-10 md:grid-cols-3">

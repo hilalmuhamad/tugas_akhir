@@ -1,450 +1,1188 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
-  Sparkles,
-  Briefcase,
-  TrendingUp,
-  Clock,
-  Wallet,
-  ArrowRight,
-  Search,
+  ClipboardList,
+  CheckCircle2,
+  CalendarDays,
   FileText,
-  History,
-  User,
-  Mail,
-  BarChart3,
-  Target,
+  UserCircle2,
+  Info,
+  BookOpen,
   GraduationCap,
+  Database,
+  ArrowRight,
+  Clock3,
+  BriefcaseBusiness,
+  WalletCards,
   Building2,
+  RefreshCw,
 } from 'lucide-react';
+
 import { useAuthStore } from '../../auth/store/authStore';
-import { getAnalysis, getHistory } from '../../career/services/careerApi';
-import { fetchJobs } from '../../jobs/services/jobApi';
-import api from '../../../services/api';
-import CareerNavbar from '../../career/components/CareerNavbar';
-import JobRecommendationCards from '../../career/components/JobRecommendationCards';
-import { laporanUnduhUrl } from '../utils/laporan';
+import AlumniNavbar from '../components/AlumniNavbar';
+
+import {
+  getActiveTracerPeriod,
+  getTracerHistory,
+  getTracerProfile,
+} from '../services/tracerStudyApi';
+
 import { prodiLabel } from '../../../utils/prodiLabel';
 
-const ROLE_LABEL = { admin: 'Admin', alumni: 'Alumni', viewer: 'Viewer' };
+const ROLE_LABEL = {
+  admin: 'Administrator',
+  alumni: 'Alumni',
+  viewer: 'Viewer',
+};
 
-export default function DashboardPage() {
-  const { user } = useAuthStore();
-  const navigate = useNavigate();
-  const [stats, setStats] = useState(null);
-  const [totalJobs, setTotalJobs] = useState(null);
-  const [latestJobs, setLatestJobs] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [personalJobs, setPersonalJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [generating, setGenerating] = useState(false);
+const FALLBACK_PERIOD = {
+  periode: new Date().getFullYear(),
+  status: 'Belum tersedia',
+  batasPengisian: null,
+  source: 'fallback',
+};
 
-  useEffect(() => {
-    let active = true;
+function formatDate(value) {
+  if (!value) return 'Belum tersedia';
 
-    (async () => {
-      try {
-        const [statsRes, jobsRes, historyRes] = await Promise.all([
-          api.get('/stats'),
-          fetchJobs(),
-          getHistory(),
-        ]);
-        if (!active) return;
+  const date = new Date(value);
 
-        const jobs = jobsRes.data || [];
-        setStats(statsRes.data);
-        setTotalJobs(jobs.length);
-        setLatestJobs(jobs.slice(0, 6));
-        setHistory(historyRes.data || []);
+  if (Number.isNaN(date.getTime())) {
+    return 'Belum tersedia';
+  }
 
-        if (historyRes.data?.length > 0) {
-          try {
-            const detail = await getAnalysis(historyRes.data[0].id);
-            if (active) setPersonalJobs(detail.data.lowongan || []);
-          } catch {
-            // rekomendasi opsional
-          }
-        }
-      } catch {
-        // biarkan tampil kosong
-      } finally {
-        if (active) setLoading(false);
-      }
-    })();
-
-    return () => {
-      active = false;
-    };
-  }, []);
-
-  const generateLaporan = async () => {
-    if (generating) return;
-    setGenerating(true);
-    // Unduh ditangani langsung oleh browser via endpoint backend (andal,
-    // tidak kena pemblokiran klik sintetis), lalu buka halaman laporan.
-    window.location.href = laporanUnduhUrl();
-    setTimeout(() => {
-      setGenerating(false);
-      navigate('/laporan');
-    }, 500);
-  };
-
-  const hariIni = new Date().toLocaleDateString('id-ID', {
-    weekday: 'long',
+  return date.toLocaleDateString('id-ID', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   });
+}
 
-  const terakhirAnalisis = history[0]?.created_at
-    ? new Date(history[0].created_at).toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      })
-    : '-';
+function formatValue(value, suffix = '') {
+  if (value === null || value === undefined || value === '') {
+    return 'Belum tersedia';
+  }
 
-  const cards = [
-    {
-      label: 'Total Lowongan Aktif',
-      value: totalJobs ?? '…',
-      icon: Briefcase,
-      color: 'bg-blue-50 text-blue-600',
-    },
-    {
-      label: 'Alumni Sudah Bekerja',
-      value: stats ? `${stats.persentase_kerja ?? 0}%` : '…',
-      sub: stats ? `${stats.alumni_bekerja} dari ${stats.total_alumni} alumni` : '',
-      icon: TrendingUp,
-      color: 'bg-emerald-50 text-emerald-600',
-    },
-    {
-      label: 'Masa Tunggu Rata-rata',
-      value: stats && stats.masa_tunggu_rata != null ? `${stats.masa_tunggu_rata} bln` : '…',
-      icon: Clock,
-      color: 'bg-amber-50 text-amber-600',
-    },
-    {
-      label: 'Gaji Awal Rata-rata',
-      value: stats && stats.gaji_rata_rata != null ? `Rp ${stats.gaji_rata_rata} jt` : '…',
-      sub: 'per bulan',
-      icon: Wallet,
-      color: 'bg-violet-50 text-violet-600',
-    },
-  ];
+  return `${value}${suffix}`;
+}
 
-  const gajiPerProdi = stats?.gaji_per_prodi
-    ? Object.entries(stats.gaji_per_prodi).sort((a, b) => b[1] - a[1])
-    : [];
-  const persenPerProdi = stats?.persen_kerja_per_prodi
-    ? Object.entries(stats.persen_kerja_per_prodi).sort((a, b) => b[1] - a[1])
-    : [];
-  const maxGaji = Math.max(...gajiPerProdi.map(([, v]) => v), 1);
+function getTracerFilled(profile, history) {
+  /*
+   * Jangan menggunakan profile?.id sebagai indikator
+   * tracer sudah diisi.
+   *
+   * Profil alumni dan pengisian tracer study adalah
+   * dua data yang berbeda.
+   *
+   * Untuk sementara, status dianggap sudah mengisi
+   * apabila API history mengembalikan minimal satu data.
+   *
+   * Jika API profile nantinya memiliki field seperti:
+   * profile.tracerFilled
+   * atau
+   * profile.sudahMengisiTracer
+   * maka field tersebut akan digunakan terlebih dahulu.
+   */
+
+  if (typeof profile?.tracerFilled === 'boolean') {
+    return profile.tracerFilled;
+  }
+
+  if (typeof profile?.sudahMengisiTracer === 'boolean') {
+    return profile.sudahMengisiTracer;
+  }
+
+  if (typeof profile?.tracerStudyFilled === 'boolean') {
+    return profile.tracerStudyFilled;
+  }
+
+  return Array.isArray(history) && history.length > 0;
+}
+
+export default function DashboardPage() {
+  const { user } = useAuthStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const [profile, setProfile] = useState(null);
+  const [period, setPeriod] = useState(FALLBACK_PERIOD);
+  const [history, setHistory] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const loadDashboard = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const [profileData, periodData, historyData] =
+        await Promise.all([
+          getTracerProfile(),
+          getActiveTracerPeriod(),
+          getTracerHistory(),
+        ]);
+
+      setProfile(profileData || null);
+
+      setPeriod(
+        periodData
+          ? {
+              ...FALLBACK_PERIOD,
+              ...periodData,
+            }
+          : FALLBACK_PERIOD
+      );
+
+      setHistory(
+        Array.isArray(historyData)
+          ? historyData
+          : []
+      );
+    } catch (err) {
+      console.error(
+        'Gagal memuat dashboard alumni:',
+        err
+      );
+
+      setError(
+        'Data Tracer Study belum dapat dimuat. Silakan coba lagi.'
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadDashboard();
+  }, [loadDashboard]);
+
+  useEffect(() => {
+    if (location.hash !== '#riwayat') {
+      return;
+    }
+
+    if (loading) {
+      return;
+    }
+
+    const target = document.getElementById('riwayat');
+
+    if (!target) {
+      return;
+    }
+
+    setTimeout(() => {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
+  }, [location.hash, loading]);
+
+  const hariIni = new Date().toLocaleDateString(
+    'id-ID',
+    {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }
+  );
+
+  /*
+   * Status tracer study TIDAK lagi bergantung
+   * pada keberadaan profile.id.
+   */
+  const tracerFilled = useMemo(
+    () => getTracerFilled(profile, history),
+    [profile, history]
+  );
+
+  const profileIncomplete =
+    !profile?.nama ||
+    !profile?.programStudi ||
+    !profile?.tahunMasuk ||
+    !profile?.tahunLulus;
+
+  /*
+   * History asli dari API diprioritaskan.
+   *
+   * Jika belum ada history tetapi tracer status
+   * menyatakan sudah mengisi, kita tidak membuat
+   * data tanggal palsu.
+   */
+  const normalizedHistory = useMemo(() => {
+    if (history.length > 0) {
+      return history;
+    }
+
+    return [];
+  }, [history]);
+
+  const latestHistory = normalizedHistory[0];
+
+  const tracerDataItems = useMemo(() => {
+    if (!profile || !tracerFilled) {
+      return [];
+    }
+
+    return [
+      {
+        label: 'Tahun Lulus',
+        value: profile.tahunLulus,
+        icon: GraduationCap,
+      },
+      {
+        label: 'Status Setelah Lulus',
+        value: profile.statusBekerja,
+        icon: BriefcaseBusiness,
+      },
+      {
+        label: 'Masa Tunggu',
+        value:
+          profile.masaTungguBulan !== null &&
+          profile.masaTungguBulan !== undefined
+            ? `${profile.masaTungguBulan} bulan`
+            : null,
+        icon: Clock3,
+      },
+      {
+        label: 'Bidang Pekerjaan',
+        value: profile.bidangPekerjaan,
+        icon: Building2,
+      },
+      {
+        label: 'Gaji Pertama',
+        value:
+          profile.gajiJuta !== null &&
+          profile.gajiJuta !== undefined
+            ? `Rp ${profile.gajiJuta} juta / bulan`
+            : null,
+        icon: WalletCards,
+      },
+      {
+        label: 'Kesesuaian Bidang',
+        value: profile.kesesuaianBidang,
+        icon: BookOpen,
+      },
+    ].filter(
+      (item) =>
+        item.value !== null &&
+        item.value !== undefined &&
+        item.value !== ''
+    );
+  }, [profile, tracerFilled]);
+
+  const displayName =
+    user?.name ||
+    profile?.nama ||
+    'Alumni';
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
-      <CareerNavbar />
+    <div className="min-h-screen bg-slate-50">
+      <AlumniNavbar />
 
-      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
-        {/* Banner sapaan */}
-        <div className="relative flex flex-col gap-5 overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-5 text-white shadow-md sm:p-8 md:flex-row md:items-center md:justify-between md:gap-8">
-          {/* Pola latar halus — ikon siluet di ujung kanan dengan shadow */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-            <GraduationCap
-              className="absolute -right-6 -top-12 h-40 w-40 rotate-12 text-white/10 drop-shadow-[0_0_25px_rgba(255,255,255,0.35)] sm:h-48 sm:w-48"
-              strokeWidth={1}
-            />
-            <Briefcase
-              className="absolute -bottom-16 right-2 h-40 w-40 -rotate-6 text-white/10 drop-shadow-[0_0_25px_rgba(255,255,255,0.35)] sm:h-48 sm:w-48"
-              strokeWidth={1}
-            />
-            <Building2
-              className="absolute right-44 -top-8 h-24 w-24 rotate-6 text-white/15 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] sm:right-56 sm:h-28 sm:w-28"
-              strokeWidth={1.2}
-            />
-            <TrendingUp
-              className="absolute bottom-8 right-44 h-20 w-20 -rotate-12 text-white/15 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)] sm:bottom-10 sm:right-56"
-              strokeWidth={1.2}
-            />
-          </div>
+      <main className="mx-auto w-full max-w-6xl px-4 py-6 md:py-8">
 
-          <div className="relative z-10 min-w-0 max-w-3xl">
-            <p className="text-xs font-medium text-white sm:text-sm">{hariIni}</p>
-            <h1 className="mt-1.5 min-w-0 truncate text-3xl font-extrabold tracking-tight sm:text-4xl">
-              Halo,{' '}
-              {user?.name
-                ? user.name
-                    .split(' ')
-                    .map((w) => (w ? w.charAt(0).toUpperCase() + w.slice(1) : w))
-                    .join(' ')
-                : ''}
-              !
-            </h1>
-            <div className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-              <span className="rounded-full border border-white/40 px-2.5 py-0.5 text-[11px] font-semibold text-white">
-                {ROLE_LABEL[user?.role] || 'Pengguna'}
-              </span>
-              <p className="min-w-0 text-xs text-white sm:text-sm">
-                Pantau statistik alumni dan temukan lowongan yang cocok dengan profil Anda.
-              </p>
+        {/* =========================
+            LOADING
+        ========================== */}
+        {loading && <DashboardSkeleton />}
+
+        {/* =========================
+            ERROR
+        ========================== */}
+        {!loading && error && (
+          <section className="rounded-2xl border border-rose-200 bg-white p-8 text-center shadow-sm">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600">
+              <RefreshCw className="h-6 w-6" />
             </div>
-            <div className="mt-4 flex flex-wrap gap-2.5">
-              <button
-                onClick={() => navigate('/analyze')}
-                className="flex h-11 items-center justify-center gap-1.5 rounded-2xl bg-white px-4 text-sm font-semibold text-blue-700 shadow-md transition hover:bg-blue-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 sm:px-5"
-              >
-                <Sparkles className="h-4 w-4" /> Analisis Karier
-              </button>
-              <button
-                onClick={() => navigate('/jobs')}
-                className="flex h-11 items-center justify-center gap-1.5 rounded-2xl border border-white/40 px-4 text-sm font-semibold text-white transition hover:bg-black/15 hover:border-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 sm:px-5"
-              >
-                <Search className="h-4 w-4" /> Cari Kerja
-              </button>
-              <button
-                onClick={generateLaporan}
-                disabled={generating}
-                aria-busy={generating}
-                className="flex h-11 items-center justify-center gap-1.5 rounded-2xl px-4 text-sm font-semibold text-white transition hover:bg-black/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 disabled:cursor-not-allowed disabled:opacity-60 sm:px-5"
-              >
-                <FileText className="h-4 w-4" />
-                <span>{generating ? 'Mengunduh...' : 'Generate Laporan IKU'}</span>
-                <span aria-live="polite" className="sr-only">
-                  {generating
-                    ? 'Laporan sedang diunduh, mohon tunggu.'
-                    : 'Laporan siap diunduh.'}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
 
-        {/* Kartu statistik */}
-        <div className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {cards.map((card) => (
-            <div
-              key={card.label}
-              className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+            <h2 className="mt-4 text-lg font-bold text-slate-900">
+              Data belum dapat dimuat
+            </h2>
+
+            <p className="mt-2 text-sm text-slate-500">
+              {error}
+            </p>
+
+            <button
+              type="button"
+              onClick={loadDashboard}
+              className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
             >
-              <span className={`flex h-9 w-9 items-center justify-center rounded-xl ${card.color}`}>
-                <card.icon className="h-4.5 w-4.5" />
-              </span>
-              <p className="mt-3 text-xl font-bold text-slate-900">{card.value}</p>
-              <p className="text-xs font-medium text-slate-500">{card.label}</p>
-              {card.sub && <p className="mt-0.5 text-[11px] text-slate-400">{card.sub}</p>}
-            </div>
-          ))}
-        </div>
+              <RefreshCw className="h-4 w-4" />
+              Coba Lagi
+            </button>
+          </section>
+        )}
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-3">
-          {/* Konten utama */}
-          <div className="lg:col-span-2">
-            {loading ? (
-              <div className="rounded-2xl border border-slate-100 bg-white p-10 text-center text-sm text-slate-400">
-                Memuat dashboard...
+        {/* =========================
+            DASHBOARD
+        ========================== */}
+        {!loading && !error && (
+          <div className="space-y-6">
+
+            {/* =========================
+                HERO
+            ========================== */}
+            <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-700 via-blue-600 to-indigo-600 p-6 text-white shadow-lg md:p-8">
+
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 overflow-hidden"
+              >
+                <GraduationCap
+                  className="absolute -right-8 -top-10 h-48 w-48 rotate-12 text-white/10 md:h-64 md:w-64"
+                  strokeWidth={1}
+                />
+
+                <Database
+                  className="absolute -bottom-12 right-32 h-40 w-40 text-white/5 md:h-52 md:w-52"
+                  strokeWidth={1}
+                />
+
+                <ClipboardList
+                  className="absolute right-72 top-12 h-20 w-20 rotate-12 text-white/5"
+                  strokeWidth={1}
+                />
               </div>
-            ) : personalJobs.length > 0 ? (
-              <JobRecommendationCards jobs={personalJobs} />
-            ) : (
-              <div className="rounded-2xl border border-slate-100 bg-white p-8 text-center shadow-sm">
-                <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
-                  <FileText className="h-6 w-6" />
-                </span>
-                <h3 className="mt-3 font-bold text-slate-800">
-                  Belum ada rekomendasi khusus untuk Anda
-                </h3>
-                <p className="mx-auto mt-1 max-w-sm text-sm text-slate-500">
-                  Lakukan analisis karier dari profil Anda, dan sistem akan mencocokkan
-                  lowongan yang paling cocok secara otomatis.
+
+              <div className="relative z-10 max-w-3xl">
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-3 py-1 text-xs font-medium text-white">
+                    {ROLE_LABEL[user?.role] || 'Alumni'}
+                  </span>
+
+                  <span className="text-xs text-blue-100">
+                    {hariIni}
+                  </span>
+                </div>
+
+                <h1 className="mt-4 text-3xl font-extrabold tracking-tight md:text-4xl">
+                  Halo, {displayName} 👋
+                </h1>
+
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-blue-50 md:text-base">
+                  Selamat datang di halaman Tracer Study.
+                  Bantu kami memahami perjalanan Anda setelah
+                  menyelesaikan pendidikan dengan memperbarui
+                  informasi dan pengalaman Anda sebagai alumni.
                 </p>
-                <button
-                  onClick={() => navigate('/analyze')}
-                  className="mt-4 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
-                >
-                  Mulai Analisis Karier
-                </button>
-              </div>
-            )}
 
-            {/* Grafik data alumni per prodi */}
-            {!loading && stats && (
-              <div className="mt-6 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-                <h3 className="flex items-center gap-2 font-bold text-slate-800">
-                  <BarChart3 className="h-4 w-4 text-slate-400" /> Data Alumni per Program Studi
-                </h3>
-                <div className="mt-4 grid gap-6 sm:grid-cols-2">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                      Gaji rata-rata (Rp juta/bln)
-                    </p>
-                    <div className="mt-2 space-y-2">
-                      {gajiPerProdi.map(([prodi, nilai]) => (
-                        <div key={prodi}>
-                          <div className="flex items-center justify-between text-xs text-slate-600">
-                            <span className="font-medium">{prodiLabel(prodi)}</span>
-                            <span className="font-semibold">{nilai} jt</span>
-                          </div>
-                          <div className="mt-1 h-2 rounded-full bg-slate-100">
-                            <div
-                              className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500"
-                              style={{ width: `${Math.round((nilai / maxGaji) * 100)}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                      Alumni sudah bekerja (%)
-                    </p>
-                    <div className="mt-2 space-y-2">
-                      {persenPerProdi.map(([prodi, nilai]) => (
-                        <div key={prodi}>
-                          <div className="flex items-center justify-between text-xs text-slate-600">
-                            <span className="font-medium">{prodiLabel(prodi)}</span>
-                            <span className="font-semibold">{nilai}%</span>
-                          </div>
-                          <div className="mt-1 h-2 rounded-full bg-slate-100">
-                            <div
-                              className="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"
-                              style={{ width: `${Math.min(nilai, 100)}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+
+                  <button
+                    type="button"
+                    onClick={() => navigate('/kuisioner')}
+                    className="inline-flex h-11 items-center gap-2 rounded-xl bg-white px-5 text-sm font-bold text-blue-700 shadow-md transition hover:bg-blue-50"
+                  >
+                    <ClipboardList className="h-4 w-4" />
+
+                    {tracerFilled
+                      ? 'Perbarui Tracer Study'
+                      : 'Isi Tracer Study'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => navigate('/profile')}
+                    className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 text-sm font-semibold text-white transition hover:bg-white/15"
+                  >
+                    <UserCircle2 className="h-4 w-4" />
+                    Profil Saya
+                  </button>
+
                 </div>
               </div>
-            )}
+            </section>
 
-            {/* Lowongan terbaru */}
-            <div className="mt-6 rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-slate-800">Lowongan Terbaru</h3>
-                <Link
-                  to="/jobs"
-                  className="flex items-center gap-1 text-sm font-semibold text-blue-600 hover:text-blue-700"
-                >
-                  Lihat semua <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-              <div className="mt-3 space-y-2">
-                {latestJobs.map((job) => (
-                  <Link
-                    key={job.id}
-                    to={`/jobs/${job.id}`}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 px-4 py-3 transition hover:border-blue-200 hover:bg-blue-50/40"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-800">
-                        {job.judul_posisi}
-                      </p>
-                      <p className="truncate text-xs text-slate-500">
-                        {job.perusahaan} · {job.lokasi || '-'}
-                      </p>
-                    </div>
-                    {job.terbuka === false ? (
-                      <span className="flex shrink-0 items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-semibold text-rose-600">
-                        Sudah Tutup
-                      </span>
-                    ) : (
-                      <span className="flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-600">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Aktif
-                      </span>
-                    )}
-                  </Link>
-                ))}
-                {!loading && latestJobs.length === 0 && (
-                  <p className="py-4 text-center text-sm text-slate-400">Belum ada lowongan.</p>
-                )}
-              </div>
-            </div>
-          </div>
+            {/* =========================
+                STATUS RINGKAS
+            ========================== */}
+            <section className="grid gap-4 md:grid-cols-3">
 
-          {/* Sidebar: profil + riwayat */}
-          <aside className="space-y-6">
-            <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-              <h3 className="flex items-center gap-2 font-bold text-slate-800">
-                <User className="h-4 w-4 text-slate-400" /> Profil Saya
-              </h3>
-              <div className="mt-4 flex items-center gap-3">
-                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-600 text-lg font-bold text-white">
-                  {(user?.name || '?').charAt(0).toUpperCase()}
-                </span>
-                <div className="min-w-0">
-                  <p className="truncate font-semibold text-slate-800">{user?.name}</p>
-                  <p className="truncate text-xs text-slate-400">
-                    {ROLE_LABEL[user?.role] || 'Pengguna'}
+              <StatusCard
+                icon={
+                  tracerFilled
+                    ? CheckCircle2
+                    : ClipboardList
+                }
+                title="Status Pengisian"
+                value={
+                  tracerFilled
+                    ? 'Sudah Mengisi'
+                    : 'Belum Mengisi'
+                }
+                description={
+                  tracerFilled
+                    ? 'Data tracer study Anda telah tersimpan.'
+                    : 'Anda belum mengisi tracer study.'
+                }
+                success={tracerFilled}
+              />
+
+              <StatusCard
+                icon={CalendarDays}
+                title="Periode Tracer"
+                value={period.periode}
+                description={`Status periode: ${
+                  period.status || 'Belum tersedia'
+                }`}
+              />
+
+              <StatusCard
+                icon={Clock3}
+                title="Batas Pengisian"
+                value={
+                  period.batasPengisian
+                    ? formatDate(period.batasPengisian)
+                    : 'Belum tersedia'
+                }
+                description="Periksa kembali periode pengisian yang sedang aktif."
+              />
+
+            </section>
+
+            {/* =========================
+                STATUS TRACER
+            ========================== */}
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                    Tracer Study
+                  </p>
+
+                  <h2 className="mt-1 text-xl font-bold text-slate-900">
+                    Status Tracer Study Anda
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Informasi mengenai pengisian tracer study
+                    pada periode {period.periode}.
                   </p>
                 </div>
-              </div>
-              <div className="mt-3 space-y-2 text-xs">
-                <p className="flex items-center gap-2 truncate text-slate-500">
-                  <Mail className="h-3.5 w-3.5 shrink-0 text-slate-400" /> {user?.email}
-                </p>
-                <p className="flex items-center gap-2 text-slate-500">
-                  <History className="h-3.5 w-3.5 shrink-0 text-slate-400" /> {history.length} analisis
-                  dilakukan
-                </p>
-                <p className="flex items-center gap-2 text-slate-500">
-                  <Target className="h-3.5 w-3.5 shrink-0 text-slate-400" /> Analisis terakhir:{' '}
-                  {terakhirAnalisis}
-                </p>
-              </div>
-              {user?.role === 'alumni' && (
-                <button
-                  onClick={() => navigate('/kuisioner')}
-                  className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl bg-blue-50 px-4 py-2 text-xs font-semibold text-blue-700 transition hover:bg-blue-100"
+
+                <div
+                  className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${
+                    tracerFilled
+                      ? 'bg-emerald-50 text-emerald-700'
+                      : 'bg-amber-50 text-amber-700'
+                  }`}
                 >
-                  <FileText className="h-3.5 w-3.5" /> Isi Kuisioner Alumni
+                  {tracerFilled ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <ClipboardList className="h-4 w-4" />
+                  )}
+
+                  {tracerFilled
+                    ? 'Sudah Mengisi'
+                    : 'Belum Mengisi'}
+                </div>
+
+              </div>
+
+              <div className="mt-5 grid gap-3 md:grid-cols-3">
+
+                <InfoItem
+                  label="Periode"
+                  value={period.periode}
+                />
+
+                <InfoItem
+                  label="Status Periode"
+                  value={
+                    period.status || 'Belum tersedia'
+                  }
+                />
+
+                <InfoItem
+                  label="Tanggal Pengisian"
+                  value={
+                    latestHistory?.tanggalPengisian
+                      ? formatDate(
+                          latestHistory.tanggalPengisian
+                        )
+                      : 'Belum tersedia'
+                  }
+                />
+
+              </div>
+
+              <div className="mt-5">
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      tracerFilled
+                        ? '/kuisioner/sukses'
+                        : '/kuisioner'
+                    )
+                  }
+                  className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                  <FileText className="h-4 w-4" />
+
+                  {tracerFilled
+                    ? 'Lihat Data Tracer Study'
+                    : 'Isi Tracer Study Sekarang'}
+
+                  <ArrowRight className="h-4 w-4" />
                 </button>
+
+              </div>
+            </section>
+
+            {/* =========================
+                PROFIL
+            ========================== */}
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+
+              <div className="flex items-center justify-between gap-4">
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                    Data Pribadi
+                  </p>
+
+                  <h2 className="mt-1 text-xl font-bold text-slate-900">
+                    Profil Alumni
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Informasi dasar yang digunakan dalam
+                    penelusuran alumni.
+                  </p>
+                </div>
+
+                <div className="hidden h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 sm:flex">
+                  <UserCircle2 className="h-5 w-5" />
+                </div>
+
+              </div>
+
+              <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                <InfoItem
+                  label="Nama"
+                  value={
+                    profile?.nama ||
+                    user?.name ||
+                    'Belum tersedia'
+                  }
+                />
+
+                <InfoItem
+                  label="Email"
+                  value={
+                    user?.email ||
+                    profile?.email ||
+                    'Belum tersedia'
+                  }
+                />
+
+                <InfoItem
+                  label="Program Studi"
+                  value={
+                    profile?.programStudi
+                      ? prodiLabel(
+                          profile.programStudi
+                        )
+                      : 'Belum tersedia'
+                  }
+                />
+
+                <InfoItem
+                  label="Jenjang"
+                  value={
+                    profile?.jenjang ||
+                    'Belum tersedia'
+                  }
+                />
+
+                <InfoItem
+                  label="Tahun Masuk"
+                  value={formatValue(
+                    profile?.tahunMasuk
+                  )}
+                />
+
+                <InfoItem
+                  label="Tahun Lulus"
+                  value={formatValue(
+                    profile?.tahunLulus
+                  )}
+                />
+
+              </div>
+
+              {profileIncomplete && (
+                <div className="mt-5 flex flex-col gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+
+                  <div>
+                    <p className="text-sm font-semibold text-amber-800">
+                      Profil Anda belum lengkap
+                    </p>
+
+                    <p className="mt-1 text-xs leading-5 text-amber-700">
+                      Lengkapi informasi profil agar
+                      data tracer study Anda lebih akurat.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate('/profile')
+                    }
+                    className="w-fit rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-white transition hover:bg-amber-600"
+                  >
+                    Lengkapi Profil
+                  </button>
+
+                </div>
               )}
-            </div>
 
-            <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
-              <div className="flex items-center justify-between">
-                <h3 className="flex items-center gap-2 font-bold text-slate-800">
-                  <History className="h-4 w-4 text-slate-400" /> Riwayat Analisis
-                </h3>
-                <button
-                  onClick={() => navigate('/analyze')}
-                  className="text-xs font-semibold text-blue-600 hover:text-blue-700"
-                >
-                  + Baru
-                </button>
+            </section>
+
+            {/* =========================
+                DATA TRACER
+            ========================== */}
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                  Data Saya
+                </p>
+
+                <h2 className="mt-1 text-xl font-bold text-slate-900">
+                  Ringkasan Data Tracer Study
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Ringkasan informasi yang telah Anda
+                  berikan melalui tracer study.
+                </p>
               </div>
-              <div className="mt-3 space-y-2">
-                {history.slice(0, 4).map((item) => (
-                  <Link
-                    key={item.id}
-                    to={`/chat/${item.id}`}
-                    className="block rounded-xl border border-slate-100 px-4 py-3 transition hover:border-blue-200 hover:bg-blue-50/40"
-                  >
-                    <p className="truncate text-sm font-semibold text-slate-800">{item.nama}</p>
-                    {item.ringkasan && (
-                      <p className="mt-0.5 line-clamp-2 text-xs text-slate-500">{item.ringkasan}</p>
-                    )}
-                    <p className="mt-1 text-[10px] text-slate-400">
-                      {new Date(item.created_at).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric',
-                      })}
-                    </p>
-                  </Link>
-                ))}
-                {!loading && history.length === 0 && (
-                  <p className="py-4 text-center text-sm text-slate-400">
-                    Belum ada analisis. Mulai dari tombol "+ Baru".
+
+              {!tracerFilled ? (
+
+                <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+
+                  <ClipboardList className="mx-auto h-8 w-8 text-slate-400" />
+
+                  <p className="mt-3 text-sm font-semibold text-slate-700">
+                    Belum ada data tracer study
                   </p>
-                )}
+
+                  <p className="mx-auto mt-1 max-w-md text-xs leading-5 text-slate-500">
+                    Data akan muncul setelah Anda mengisi
+                    tracer study.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate('/kuisioner')
+                    }
+                    className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-blue-700"
+                  >
+                    Isi Tracer Study
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+
+                </div>
+
+              ) : tracerDataItems.length === 0 ? (
+
+                <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+
+                  <Info className="mx-auto h-8 w-8 text-slate-400" />
+
+                  <p className="mt-3 text-sm font-semibold text-slate-700">
+                    Data tracer tersimpan
+                  </p>
+
+                  <p className="mx-auto mt-1 max-w-md text-xs leading-5 text-slate-500">
+                    Data tracer study Anda sudah tersimpan,
+                    tetapi belum ada ringkasan yang dapat
+                    ditampilkan.
+                  </p>
+
+                </div>
+
+              ) : (
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+
+                  {tracerDataItems.map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <div
+                        key={item.label}
+                        className="rounded-xl border border-slate-100 bg-slate-50/60 p-4 transition hover:border-blue-100 hover:bg-blue-50/30"
+                      >
+
+                        <div className="flex items-center gap-2">
+
+                          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-blue-600 shadow-sm">
+                            <Icon className="h-4 w-4" />
+                          </span>
+
+                          <p className="text-xs font-medium text-slate-500">
+                            {item.label}
+                          </p>
+
+                        </div>
+
+                        <p className="mt-3 text-sm font-bold text-slate-800">
+                          {item.value}
+                        </p>
+
+                      </div>
+                    );
+                  })}
+
+                </div>
+
+              )}
+
+            </section>
+
+            {/* =========================
+                INFORMASI
+            ========================== */}
+            <section className="grid gap-6 lg:grid-cols-2">
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+
+                <div className="flex items-center gap-3">
+
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                    <Info className="h-5 w-5" />
+                  </span>
+
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                      Informasi
+                    </p>
+
+                    <h2 className="text-lg font-bold text-slate-900">
+                      Apa itu Tracer Study?
+                    </h2>
+                  </div>
+
+                </div>
+
+                <p className="mt-4 text-sm leading-6 text-slate-600">
+                  Tracer Study merupakan kegiatan penelusuran
+                  alumni yang dilakukan perguruan tinggi untuk
+                  memperoleh informasi dan umpan balik mengenai
+                  perjalanan lulusan setelah menyelesaikan
+                  pendidikan.
+                </p>
+
+                <p className="mt-3 text-sm leading-6 text-slate-600">
+                  Informasi yang diberikan alumni menjadi bahan
+                  bagi program studi untuk memahami perjalanan
+                  lulusan dan meningkatkan kualitas pendidikan.
+                </p>
+
               </div>
-            </div>
-          </aside>
-        </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6">
+
+                <div className="flex items-center gap-3">
+
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                    <GraduationCap className="h-5 w-5" />
+                  </span>
+
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600">
+                      Kontribusi Alumni
+                    </p>
+
+                    <h2 className="text-lg font-bold text-slate-900">
+                      Mengapa Partisipasi Anda Penting?
+                    </h2>
+                  </div>
+
+                </div>
+
+                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+
+                  <BenefitCard
+                    icon={BookOpen}
+                    title="Umpan Balik"
+                    text="Memberikan informasi mengenai perjalanan Anda setelah menyelesaikan pendidikan."
+                  />
+
+                  <BenefitCard
+                    icon={GraduationCap}
+                    title="Evaluasi Pendidikan"
+                    text="Membantu program studi memahami relevansi pendidikan dengan perjalanan lulusan."
+                  />
+
+                  <BenefitCard
+                    icon={Database}
+                    title="Database Alumni"
+                    text="Membantu membangun data alumni yang lebih lengkap dan terkini."
+                  />
+
+                  <BenefitCard
+                    icon={Building2}
+                    title="Pengembangan"
+                    text="Menjadi salah satu bahan pertimbangan dalam pengembangan pendidikan."
+                  />
+
+                </div>
+
+              </div>
+
+            </section>
+
+            {/* =========================
+                RIWAYAT
+            ========================== */}
+            <section
+              id="riwayat"
+              className="scroll-mt-24 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6"
+            >
+
+              <div className="flex items-center justify-between gap-4">
+
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-blue-600">
+                    Riwayat
+                  </p>
+
+                  <h2 className="mt-1 text-xl font-bold text-slate-900">
+                    Riwayat Tracer Study
+                  </h2>
+
+                  <p className="mt-1 text-sm text-slate-500">
+                    Riwayat pengisian tracer study Anda.
+                  </p>
+                </div>
+
+                <CalendarDays className="hidden h-5 w-5 text-slate-400 sm:block" />
+
+              </div>
+
+              {normalizedHistory.length === 0 ? (
+
+                <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center">
+
+                  <ClipboardList className="mx-auto h-8 w-8 text-slate-400" />
+
+                  <p className="mt-3 text-sm font-semibold text-slate-700">
+                    Belum ada riwayat tracer study
+                  </p>
+
+                  <p className="mx-auto mt-1 max-w-md text-xs leading-5 text-slate-500">
+                    Isi tracer study untuk mulai mencatat
+                    perjalanan pengisian Anda.
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate('/kuisioner')
+                    }
+                    className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-blue-700"
+                  >
+                    Isi Tracer Study
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+
+                </div>
+
+              ) : (
+
+                <div className="mt-5 overflow-x-auto">
+
+                  <table className="w-full min-w-[520px] text-left text-sm">
+
+                    <thead>
+                      <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-400">
+
+                        <th className="py-3 font-semibold">
+                          Periode
+                        </th>
+
+                        <th className="py-3 font-semibold">
+                          Status
+                        </th>
+
+                        <th className="py-3 font-semibold">
+                          Tanggal Pengisian
+                        </th>
+
+                      </tr>
+                    </thead>
+
+                    <tbody>
+
+                      {normalizedHistory.map(
+                        (item, index) => {
+
+                          const isComplete =
+                            item.status === 'Selesai' ||
+                            item.status === 'Sudah Mengisi' ||
+                            item.status === 'completed' ||
+                            item.status === 'completed';
+
+                          return (
+                            <tr
+                              key={`${item.periode}-${index}`}
+                              className="border-b border-slate-100 last:border-0"
+                            >
+
+                              <td className="py-3 font-medium text-slate-700">
+                                {item.periode ||
+                                  'Belum tersedia'}
+                              </td>
+
+                              <td className="py-3">
+
+                                <span
+                                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                                    isComplete
+                                      ? 'bg-emerald-50 text-emerald-700'
+                                      : 'bg-amber-50 text-amber-700'
+                                  }`}
+                                >
+                                  {isComplete ? (
+                                    <CheckCircle2 className="h-3.5 w-3.5" />
+                                  ) : (
+                                    <ClipboardList className="h-3.5 w-3.5" />
+                                  )}
+
+                                  {item.status ||
+                                    'Belum tersedia'}
+                                </span>
+
+                              </td>
+
+                              <td className="py-3 text-slate-600">
+                                {formatDate(
+                                  item.tanggalPengisian
+                                )}
+                              </td>
+
+                            </tr>
+                          );
+                        }
+                      )}
+
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+              )}
+
+            </section>
+
+            {/* =========================
+                CTA
+            ========================== */}
+            <section className="relative overflow-hidden rounded-2xl border border-blue-100 bg-blue-50 p-6 md:p-8">
+
+              <div className="relative z-10 max-w-3xl">
+
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white">
+                  <ClipboardList className="h-5 w-5" />
+                </div>
+
+                <h2 className="mt-4 text-2xl font-bold text-slate-900">
+                  Mari Berkontribusi Melalui Tracer Study
+                </h2>
+
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Informasi dari Anda membantu program studi
+                  memahami perjalanan alumni dan menjadi bahan
+                  pengembangan kualitas pendidikan di masa
+                  mendatang.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(
+                      tracerFilled
+                        ? '/kuisioner/sukses'
+                        : '/kuisioner'
+                    )
+                  }
+                  className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-blue-700"
+                >
+                  <FileText className="h-4 w-4" />
+
+                  {tracerFilled
+                    ? 'Lihat Data Tracer Study'
+                    : 'Isi Tracer Study'}
+
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+
+              </div>
+
+              <GraduationCap
+                aria-hidden="true"
+                className="absolute -bottom-12 -right-6 h-48 w-48 text-blue-600/5 md:h-64 md:w-64"
+                strokeWidth={1}
+              />
+
+            </section>
+
+          </div>
+        )}
+
       </main>
+    </div>
+  );
+}
+
+/* ============================================================
+   STATUS CARD
+============================================================ */
+
+function StatusCard({
+  icon: Icon,
+  title,
+  value,
+  description,
+  success = false,
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
+      <div className="flex items-start justify-between gap-3">
+
+        <div className="min-w-0">
+
+          <p className="text-xs font-medium text-slate-500">
+            {title}
+          </p>
+
+          <p className="mt-2 break-words text-lg font-bold text-slate-900">
+            {value}
+          </p>
+
+        </div>
+
+        <span
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+            success
+              ? 'bg-emerald-50 text-emerald-600'
+              : 'bg-blue-50 text-blue-600'
+          }`}
+        >
+          <Icon className="h-5 w-5" />
+        </span>
+
+      </div>
+
+      <p className="mt-3 text-xs leading-5 text-slate-500">
+        {description}
+      </p>
+
+    </div>
+  );
+}
+
+/* ============================================================
+   INFO ITEM
+============================================================ */
+
+function InfoItem({ label, value }) {
+  return (
+    <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
+
+      <p className="text-xs font-medium text-slate-500">
+        {label}
+      </p>
+
+      <p className="mt-1.5 break-words text-sm font-semibold text-slate-800">
+        {value}
+      </p>
+
+    </div>
+  );
+}
+
+/* ============================================================
+   BENEFIT CARD
+============================================================ */
+
+function BenefitCard({
+  icon: Icon,
+  title,
+  text,
+}) {
+  return (
+    <div className="rounded-xl border border-slate-100 p-4">
+
+      <div className="flex items-center gap-2">
+
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+          <Icon className="h-4 w-4" />
+        </span>
+
+        <p className="text-xs font-bold text-slate-800">
+          {title}
+        </p>
+
+      </div>
+
+      <p className="mt-2 text-xs leading-5 text-slate-500">
+        {text}
+      </p>
+
+    </div>
+  );
+}
+
+/* ============================================================
+   DASHBOARD SKELETON
+============================================================ */
+
+function DashboardSkeleton() {
+  return (
+    <div className="space-y-6 animate-pulse">
+
+      <div className="h-64 rounded-3xl bg-slate-200" />
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="h-32 rounded-2xl bg-slate-200" />
+        <div className="h-32 rounded-2xl bg-slate-200" />
+        <div className="h-32 rounded-2xl bg-slate-200" />
+      </div>
+
+      <div className="h-52 rounded-2xl bg-slate-200" />
+
+      <div className="h-64 rounded-2xl bg-slate-200" />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="h-64 rounded-2xl bg-slate-200" />
+        <div className="h-64 rounded-2xl bg-slate-200" />
+      </div>
+
+      <div className="h-64 rounded-2xl bg-slate-200" />
+
+      <div className="h-48 rounded-2xl bg-slate-200" />
+
     </div>
   );
 }
