@@ -51,9 +51,17 @@ export async function getTracerHistory() {
 /**
  * Opsi isian kuisioner diambil langsung dari API OLAP PostgreSQL,
  * bukan konstanta hardcode di frontend:
- *  - program_studi / specialisasi / status_bekerja / hubungan_bidang
- *    dari GET /api/olap/detail (view v_olap_detail, seluruh data faktur)
+ *  - program_studi / specialisasi / status_bekerja /
+ *    kategori_horizontal / kategori_vertikal dari
+ *    GET /api/olap/detail (view v_olap_detail, seluruh histori)
  *  - bidang_pekerjaan dari GET /api/alumni (dimensi alumni, butuh login)
+ *
+ * Opsi keselarasan sengaja dibaca dari dua kolom terpisah dan
+ * digabung: dim_keselarasan menyimpan pasangan horizontal x
+ * vertikal, jadi kedua kolom berisi himpunan nilai yang sama
+ * ("Selaras" dan "Tidak Selaras"). Kalau tabel fakta masih kosong,
+ * daftarnya ikut kosong dan formulir menampilkan pesan "opsi belum
+ * tersedia" — nilai tidak pernah ditebak di frontend.
  */
 export async function getKuisionerOptions() {
   const [detailRes, alumniRes] = await Promise.all([
@@ -66,11 +74,17 @@ export async function getKuisionerOptions() {
 
   const distinct = (values) => [...new Set(values.filter((v) => v != null && v !== ''))];
 
+  const kategoriKeselarasan = distinct([
+    ...detailRows.map((r) => r.kategori_horizontal),
+    ...detailRows.map((r) => r.kategori_vertikal),
+  ]).sort();
+
   return {
     programStudi: distinct(detailRows.map((r) => r.program_studi)),
     specialisasi: distinct(detailRows.map((r) => r.specialisasi)),
     statusBekerja: distinct(detailRows.map((r) => r.status_bekerja)),
-    hubunganBidang: distinct(detailRows.map((r) => r.hubungan_bidang)),
+    /** Dipakai untuk kedua pertanyaan keselarasan (horizontal & vertikal). */
+    kategoriKeselarasan,
     bidangPekerjaan: distinct(alumniRows.map((r) => r.bidangPekerjaan)),
   };
 }

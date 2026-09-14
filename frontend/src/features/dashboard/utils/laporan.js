@@ -1,8 +1,16 @@
 /**
- * Utilitas pembuatan laporan IKU tracer study alumni:
+ * Utilitas pembuatan laporan tracer study alumni:
  * - rekap per program studi (total, % bekerja, gaji, masa tunggu)
  * - unduhan CSV via endpoint backend (handled langsung oleh browser,
  *   lebih andal daripada klik sintetis di halaman)
+ *
+ * CATATAN PENTING TENTANG ISTILAH
+ * Angka di sini adalah "persentase alumni bekerja", BUKAN IKU-1.
+ * IKU-1 menghitung lulusan yang bekerja, berwirausaha, ATAU
+ * melanjutkan studi, sedangkan sejak revisi pascasidang
+ * 2026-08-27 "Melanjutkan Studi" masuk ke kategori
+ * "Tidak Bekerja". Jadi kedua indikator itu tidak boleh
+ * disamakan.
  */
 
 import api from '../../../services/api';
@@ -19,7 +27,9 @@ export function rekapPerProdi(alumni) {
     const key = r.programStudi || 'Umum';
     const g = map.get(key) ?? { prodi: prodiLabel(key), total: 0, bekerja: 0, gaji: [], tunggu: [] };
     g.total += 1;
-    if (r.statusBekerja === 'Bekerja' || r.statusBekerja === 'Wirausaha') g.bekerja += 1;
+    // dim_status_kerja hanya berisi "Bekerja" dan "Tidak Bekerja";
+    // "Wirausaha/Startup" sudah dilebur ke "Bekerja" oleh ETL.
+    if (r.statusBekerja === 'Bekerja') g.bekerja += 1;
     if (r.gajiJuta != null) g.gaji.push(r.gajiJuta);
     if (r.masaTungguBulan != null) g.tunggu.push(r.masaTungguBulan);
     map.set(key, g);
@@ -50,12 +60,12 @@ export function buildLaporanCsv(stats, alumni) {
   const jam = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
   const rows = [
-    ['Laporan IKU Tracer Study Alumni'],
+    ['Laporan Tracer Study Alumni'],
     ['Dibuat pada', `${tanggal}, ${jam}`],
     [''],
     ['Indikator', 'Nilai'],
     ['Total alumni', stats?.total_alumni ?? 0],
-    ['Alumni bekerja (%)', `${stats?.persentase_kerja ?? 0}%`],
+    ['Persentase alumni bekerja', `${stats?.persentase_kerja ?? 0}%`],
     ['Masa tunggu rata-rata (bulan)', stats?.masa_tunggu_rata ?? '-'],
     ['Gaji rata-rata (Rp juta/bulan)', stats?.gaji_rata_rata ?? '-'],
     ['Jumlah program studi', stats?.jumlah_prodi ?? 0],
@@ -76,7 +86,7 @@ export function unduhLaporanCsv(stats, alumni) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `laporan-iku-tracer-study-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.download = `laporan-tracer-study-${new Date().toISOString().slice(0, 10)}.csv`;
   a.style.display = 'none';
   document.body.appendChild(a);
   a.click();

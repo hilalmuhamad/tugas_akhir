@@ -179,6 +179,49 @@ export default function KuisionerPage() {
     ));
   };
 
+  /**
+   * Satu pertanyaan keselarasan (Selaras / Tidak Selaras).
+   *
+   * Kedua dimensi memakai himpunan opsi yang sama, yaitu
+   * options.kategoriKeselarasan dari dim_keselarasan PostgreSQL,
+   * sehingga tidak ada nilai yang ditulis tetap di frontend.
+   */
+  const renderKeselarasan = (field, judul, pertanyaan) => (
+    <div className="sm:col-span-2">
+      <label className={labelCls}>{judul}</label>
+
+      <p className="mb-2 text-xs text-slate-500">{pertanyaan}</p>
+
+      <div className="grid gap-2 sm:grid-cols-2">
+        {options.kategoriKeselarasan?.map((opt) => (
+          <label
+            key={opt}
+            className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
+              form[field] === opt
+                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                : 'border-slate-200 text-slate-600 hover:border-blue-300'
+            }`}
+          >
+            <input
+              type="radio"
+              name={field}
+              className="accent-blue-600"
+              value={opt}
+              checked={form[field] === opt}
+              onChange={(e) => setField(field, e.target.value)}
+              required
+            />
+            {opt}
+          </label>
+        ))}
+
+        {!options.kategoriKeselarasan?.length && (
+          <p className="text-sm text-slate-400">-- Tidak ada data dari API --</p>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <AlumniNavbar />
@@ -413,8 +456,15 @@ export default function KuisionerPage() {
                     {isWorking && (
                       <>
                         <div className="sm:col-span-2">
-                          <p className="mb-3 border-t border-slate-100 pt-4 text-sm font-semibold text-blue-600">
-                            Keselarasan Bidang Kerja (hanya untuk yang sudah bekerja)
+                          <p className="mb-1 border-t border-slate-100 pt-4 text-sm font-semibold text-blue-600">
+                            Keselarasan Pekerjaan (hanya untuk yang sudah bekerja)
+                          </p>
+                          <p className="mb-3 text-xs text-slate-500">
+                            Keselarasan diukur pada dua dimensi. Horizontal
+                            menilai kesesuaian bidang pekerjaan dengan bidang
+                            studi, vertikal menilai kesesuaian tingkat
+                            pekerjaan dengan jenjang pendidikan yang Anda
+                            tempuh.
                           </p>
                         </div>
 
@@ -442,38 +492,17 @@ export default function KuisionerPage() {
                           </select>
                         </div>
 
-                        <div className="sm:col-span-2">
-                          <label className={labelCls}>
-                            Seberapa erat hubungan antara bidang studi dengan pekerjaan Anda
-                            saat ini?
-                          </label>
-                          <div className="grid gap-2 sm:grid-cols-3">
-                            {options.hubunganBidang?.map((opt) => (
-                              <label
-                                key={opt}
-                                className={`flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-sm transition ${
-                                  form.kesesuaianBidang === opt
-                                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                    : 'border-slate-200 text-slate-600 hover:border-blue-300'
-                                }`}
-                              >
-                                <input
-                                  type="radio"
-                                  name="kesesuaianBidang"
-                                  className="accent-blue-600"
-                                  value={opt}
-                                  checked={form.kesesuaianBidang === opt}
-                                  onChange={(e) => setField('kesesuaianBidang', e.target.value)}
-                                  required
-                                />
-                                {opt}
-                              </label>
-                            ))}
-                            {!options.hubunganBidang?.length && (
-                              <p className="text-sm text-slate-400">-- Tidak ada data dari API --</p>
-                            )}
-                          </div>
-                        </div>
+                        {renderKeselarasan(
+                          'kesesuaianBidang',
+                          'Keselarasan horizontal',
+                          'Apakah bidang pekerjaan Anda saat ini sesuai dengan bidang studi yang Anda tempuh?'
+                        )}
+
+                        {renderKeselarasan(
+                          'tingkatPendidikanSesuai',
+                          'Keselarasan vertikal',
+                          'Apakah tingkat pekerjaan Anda saat ini sesuai dengan jenjang pendidikan Anda? Pekerjaan pada tingkat yang sama atau lebih tinggi dinilai Selaras, pekerjaan pada tingkat yang lebih rendah dinilai Tidak Selaras.'
+                        )}
                       </>
                     )}
                   </div>
