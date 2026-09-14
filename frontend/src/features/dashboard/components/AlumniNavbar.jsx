@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ChevronDown, ClipboardList, LayoutDashboard, LogOut, UserCircle2, History } from 'lucide-react';
+import { ChevronDown, ClipboardList, LayoutDashboard, LogOut, UserCircle2, History, Sparkles, BriefcaseBusiness } from 'lucide-react';
 import { useAuthStore } from '../../auth/store/authStore';
 
 const ROLE_LABEL = {
@@ -30,6 +30,8 @@ export default function AlumniNavbar() {
     () => [
       { to: '/dashboard', label: 'Dashboard' },
       { to: '/kuisioner', label: 'Tracer Study' },
+      { to: '/analyze', label: 'Analisis Karier' },
+      { to: '/jobs', label: 'Lowongan' },
       { to: '/profile', label: 'Profil Saya' },
       { to: '/dashboard#riwayat', label: 'Riwayat' },
     ],
@@ -111,6 +113,24 @@ export default function AlumniNavbar() {
                 className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 hover:bg-slate-50"
               >
                 <ClipboardList className="h-4 w-4" /> Tracer Study
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate('/analyze');
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 hover:bg-slate-50"
+              >
+                <Sparkles className="h-4 w-4" /> Analisis Karier
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate('/jobs');
+                }}
+                className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-600 hover:bg-slate-50"
+              >
+                <BriefcaseBusiness className="h-4 w-4" /> Lowongan
               </button>
               <button
                 onClick={() => {

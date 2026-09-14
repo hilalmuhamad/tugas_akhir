@@ -16,6 +16,8 @@ import {
   WalletCards,
   Building2,
   RefreshCw,
+  Sparkles,
+  Search,
 } from 'lucide-react';
 
 import { useAuthStore } from '../../auth/store/authStore';
@@ -388,6 +390,15 @@ export default function DashboardPage() {
 
                   <button
                     type="button"
+                    onClick={() => navigate('/analyze')}
+                    className="inline-flex h-11 items-center gap-2 rounded-xl bg-amber-400 px-5 text-sm font-bold text-slate-900 shadow-md transition hover:bg-amber-300"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    Analisis Karier
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => navigate('/profile')}
                     className="inline-flex h-11 items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-5 text-sm font-semibold text-white transition hover:bg-white/15"
                   >
@@ -395,6 +406,32 @@ export default function DashboardPage() {
                     Profil Saya
                   </button>
 
+                </div>
+              </div>
+            </section>
+
+            {/* =========================
+                ANALISIS KARIER - MENU UTAMA (9-Router)
+            ========================== */}
+            <section className="grid gap-4 md:grid-cols-2">
+              <div className="group relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 p-5 shadow-sm transition hover:shadow-md dark:border-amber-500/20 dark:from-amber-950/20 dark:to-orange-950/20">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 text-white shadow-sm"><Sparkles className="h-6 w-6" /></span>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-900 dark:text-white">Analisis Karier LinkedIn</h3>
+                    <p className="mt-1 text-sm leading-5 text-slate-600 dark:text-slate-400">Tempel link LinkedIn + deskripsi. AI DeepSeek via 9-router akan analisis profil dan hitung <b>% kecocokan</b> ke pekerjaan (mis. backend 85%).</p>
+                    <button onClick={() => navigate('/analyze')} className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-xs font-bold text-white hover:bg-amber-600">Mulai Analisis <ArrowRight className="h-3.5 w-3.5" /></button>
+                  </div>
+                </div>
+              </div>
+              <div className="group relative overflow-hidden rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-5 shadow-sm transition hover:shadow-md dark:border-blue-500/20 dark:from-blue-950/20 dark:to-indigo-950/20">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm"><Search className="h-6 w-6" /></span>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-slate-900 dark:text-white">Cari Lowongan (Scraping)</h3>
+                    <p className="mt-1 text-sm leading-5 text-slate-600 dark:text-slate-400">Lowongan dari 4 sumber (Loker, Remotive, Jobicy, Adzuna) — TF-IDF 60% query + 40% profil.</p>
+                    <button onClick={() => navigate('/jobs')} className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700">Cari Kerja <ArrowRight className="h-3.5 w-3.5" /></button>
+                  </div>
                 </div>
               </div>
             </section>

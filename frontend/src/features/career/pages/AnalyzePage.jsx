@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { History, ArrowRight } from 'lucide-react';
+import { History, ArrowRight, Link2, Loader2 } from 'lucide-react';
 import { useCareerStore } from '../store/careerStore';
-import { getHistory } from '../services/careerApi';
+import { getHistory, scrapeLinkedin } from '../services/careerApi';
 import CareerNavbar from '../components/CareerNavbar';
 
 const STEPS = [
@@ -29,12 +29,36 @@ export default function AnalyzePage() {
   const [linkedinUrl, setLinkedinUrl] = useState('');
   const [profileText, setProfileText] = useState('');
   const [history, setHistory] = useState([]);
+  const [linkedinLoading, setLinkedinLoading] = useState(false);
+  const [linkedinMsg, setLinkedinMsg] = useState(null);
 
   useEffect(() => {
     getHistory()
       .then(({ data }) => setHistory(data || []))
       .catch(() => setHistory([]));
   }, []);
+
+  const handleLinkedinScrape = async () => {
+    if (!linkedinUrl) return;
+    setLinkedinLoading(true);
+    setLinkedinMsg(null);
+    try {
+      const { data } = await scrapeLinkedin(linkedinUrl);
+      if (data.success && data.text) {
+        // Isi otomatis profileText dengan hasil scrape + beri tahu user
+        setProfileText((prev) => {
+          const sep = prev ? '\n\n--- LinkedIn scrape ---\n' : '';
+          return prev + sep + data.text;
+        });
+        setLinkedinMsg(`✓ Berhasil mengambil ${data.length} karakter dari LinkedIn. Silakan periksa dan lengkapi sebelum analisis.`);
+      }
+    } catch (err) {
+      const msg = err.response?.data?.message || 'Gagal mengambil LinkedIn (halaman privat). Silakan tempel manual isi profil.';
+      setLinkedinMsg(msg);
+    } finally {
+      setLinkedinLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,32 +96,45 @@ export default function AnalyzePage() {
             <form className="mt-5 space-y-5" onSubmit={handleSubmit}>
               <label className="block">
                 <span className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Link LinkedIn <span className="text-slate-400">(opsional)</span>
+                  Link LinkedIn <span className="text-slate-400">(opsional — via OpenRouter 9-router DeepSeek)</span>
                 </span>
-                <input
-                  type="url"
-                  value={linkedinUrl}
-                  onChange={(e) => setLinkedinUrl(e.target.value)}
-                  placeholder="https://www.linkedin.com/in/username"
-                  className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    value={linkedinUrl}
+                    onChange={(e) => setLinkedinUrl(e.target.value)}
+                    placeholder="https://www.linkedin.com/in/username"
+                    className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleLinkedinScrape}
+                    disabled={linkedinLoading || !linkedinUrl}
+                    className="shrink-0 inline-flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-2.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 disabled:opacity-50"
+                  >
+                    {linkedinLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Link2 className="h-4 w-4" />}
+                    Ambil
+                  </button>
+                </div>
+                {linkedinMsg && <p className="mt-1.5 text-xs text-slate-500">{linkedinMsg}</p>}
+                <p className="mt-1 text-xs text-slate-400">Jika link privat, tempel manual isi profil di bawah. Deskripsi berat IT Backend akan otomatis menunjukkan % kecocokan ke lowongan Backend.</p>
               </label>
 
               <label className="block">
                 <span className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Isi Profil LinkedIn <span className="text-red-500">*</span>
+                  Isi Profil LinkedIn <span className="text-red-500">*</span> <span className="text-slate-400 text-xs">(akan dicocokkan TF-IDF ke lowongan — mis. backend → % kecocokan backend)</span>
                 </span>
                 <textarea
                   value={profileText}
                   onChange={(e) => setProfileText(e.target.value)}
                   required
-                  minLength={100}
+                  minLength={linkedinUrl ? 50 : 100}
                   rows={10}
-                  placeholder="Salin seluruh isi profil LinkedIn Anda di sini — pengalaman kerja, pendidikan, skills, ringkasan, dll. (minimal 100 karakter)"
+                  placeholder="Salin seluruh isi profil LinkedIn Anda di sini — pengalaman kerja, pendidikan, skills, ringkasan, dll. Jika sudah klik 'Ambil' dari link di atas, periksa hasilnya di sini. Minimal 50 karakter jika pakai link, 100 jika tanpa link."
                   className="w-full resize-y rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
                 <span className="mt-1 block text-xs text-slate-400">
-                  {profileText.length} karakter
+                  {profileText.length} karakter {linkedinUrl ? '(min 50 dengan link)' : '(min 100)'} — model OpenRouter DeepSeek via 9-router gateway akan analisis deskripsi berat IT Backend → % kecocokan
                 </span>
               </label>
 
