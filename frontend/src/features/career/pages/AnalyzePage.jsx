@@ -4,6 +4,7 @@ import { History, ArrowRight, Link2, Loader2 } from 'lucide-react';
 import { useCareerStore } from '../store/careerStore';
 import { getHistory, scrapeLinkedin } from '../services/careerApi';
 import CareerNavbar from '../components/CareerNavbar';
+import Footer from '../../../components/Footer';
 
 const STEPS = [
   {
@@ -215,6 +216,7 @@ export default function AnalyzePage() {
           </section>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

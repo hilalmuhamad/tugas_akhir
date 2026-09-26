@@ -4,10 +4,9 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, CartesianGrid } from 
 import { getStats } from "../../../services/api";
 
 const FALLBACK = [
-  { prodi: "Informatika", gaji: 6.4 },
-  { prodi: "Sistem Info", gaji: 5.8 },
-  { prodi: "Logistik", gaji: 5.2 },
-  { prodi: "Bisnis Digital", gaji: 5.5 },
+  { prodi: "Comm&Mgmt", gaji: 6.4 },
+  { prodi: "Sci&Tech", gaji: 5.8 },
+  { prodi: "Others", gaji: 5.2 },
 ];
 
 export default function PratinjauOlap() {

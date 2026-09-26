@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCareerStore } from '../store/careerStore';
 import CareerNavbar from '../components/CareerNavbar';
+import Footer from '../../../components/Footer';
 import ProfileAnalysisCard from '../components/ProfileAnalysisCard';
 import JobRecommendationCards from '../components/JobRecommendationCards';
 import ChatBubble from '../components/ChatBubble';
@@ -176,6 +177,7 @@ export default function ChatPage() {
           </div>
         </section>
       </main>
+      <Footer />
     </div>
   );
 }

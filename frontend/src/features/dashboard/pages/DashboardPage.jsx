@@ -22,6 +22,7 @@ import {
 
 import { useAuthStore } from '../../auth/store/authStore';
 import AlumniNavbar from '../components/AlumniNavbar';
+import Footer from '../../../components/Footer';
 
 import {
   getActiveTracerPeriod,
@@ -1087,6 +1088,7 @@ export default function DashboardPage() {
         )}
 
       </main>
+      <Footer />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import api from '../../../services/api';
 import AlumniNavbar from '../components/AlumniNavbar';
+import Footer from '../../../components/Footer';
 import { prodiLabel } from '../../../utils/prodiLabel';
 
 const STATUS_LABEL = {
@@ -181,6 +182,7 @@ export default function KuisionerSuccessPage() {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

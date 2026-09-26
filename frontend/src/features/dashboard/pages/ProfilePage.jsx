@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserCircle2, Mail, GraduationCap, CalendarDays, ClipboardList } from 'lucide-react';
 import { useAuthStore } from '../../auth/store/authStore';
 import AlumniNavbar from '../components/AlumniNavbar';
+import Footer from '../../../components/Footer';
 import { getTracerProfile } from '../services/tracerStudyApi';
 import { prodiLabel } from '../../../utils/prodiLabel';
 
@@ -99,6 +100,7 @@ export default function ProfilePage() {
           </section>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

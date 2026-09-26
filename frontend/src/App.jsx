@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import ProtectedRoute from './components/ProtectedRoute';
 import LandingPage from './features/landing/pages/LandingPage.jsx';
 import LoginPage from './features/auth/pages/LoginPage.jsx';
@@ -13,10 +14,33 @@ import KuisionerSuccessPage from './features/dashboard/pages/KuisionerSuccessPag
 import LaporanPage from './features/dashboard/pages/LaporanPage.jsx';
 import ProfilePage from './features/dashboard/pages/ProfilePage.jsx';
 
-function App() {
+/**
+ * Bungkus halaman dengan animasi fade/slide saat rute berubah.
+ */
+function AnimatedRoutes() {
+  const location = useLocation();
+  const [displayed, setDisplayed] = useState(location);
+  const timer = useRef(null);
+  const animating = location.pathname !== displayed.pathname;
+
+  useEffect(() => {
+    if (!animating) return undefined;
+    timer.current = setTimeout(() => setDisplayed(location), 160);
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, [animating, location]);
+
   return (
-    <BrowserRouter>
-      <Routes>
+    <div
+      key={displayed.pathname}
+      className="page-enter"
+      style={{
+        opacity: animating ? 0 : 1,
+        transition: 'opacity 160ms ease',
+      }}
+    >
+      <Routes location={displayed}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -101,6 +125,14 @@ function App() {
           }
         />
       </Routes>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }

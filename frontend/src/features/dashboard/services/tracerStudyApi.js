@@ -14,11 +14,15 @@ export async function getTracerProfile() {
 
 export async function getActiveTracerPeriod() {
   try {
-    const { data } = await api.get('/tracer-study/period-active');
+    // Backend tidak punya /tracer-study/period-active; tahun survei aktif
+    // dibaca dari dim_tahun_survei via OLAP (tahun terbesar = survei berjalan).
+    const { data } = await api.get('/olap/tahun-survei');
+    const list = Array.isArray(data?.data) ? data.data.map(Number).filter(Number.isFinite) : [];
+    if (list.length === 0) throw new Error('empty');
     return {
-      periode: data?.periode ?? new Date().getFullYear(),
-      status: data?.status ?? 'Belum tersedia',
-      batasPengisian: data?.batas_pengisian ?? null,
+      periode: Math.max(...list),
+      status: 'Aktif',
+      batasPengisian: null,
       source: 'api',
     };
   } catch {
@@ -33,16 +37,19 @@ export async function getActiveTracerPeriod() {
 
 export async function getTracerHistory() {
   try {
-    const { data } = await api.get('/tracer-study/history');
-    if (!Array.isArray(data)) {
+    // Backend tidak punya /tracer-study/history per user; riwayat
+    // diturunkan dari profil milik sendiri: ada profil = pernah mengisi.
+    const { data } = await api.get('/profile');
+    if (!data || data.tahunLulus == null) {
       return [];
     }
-
-    return data.map((item) => ({
-      periode: item.periode ?? item.tahun_survei ?? '-',
-      status: item.status ?? 'Selesai',
-      tanggalPengisian: item.tanggal_pengisian ?? item.created_at ?? null,
-    }));
+    return [
+      {
+        periode: data.tahunLulus,
+        status: 'Selesai',
+        tanggalPengisian: null,
+      },
+    ];
   } catch {
     return [];
   }
@@ -51,32 +58,34 @@ export async function getTracerHistory() {
 /**
  * Opsi isian kuisioner diambil langsung dari API OLAP PostgreSQL,
  * bukan konstanta hardcode di frontend:
- *  - program_studi / specialisasi / status_bekerja /
- *    kategori_horizontal / kategori_vertikal dari
+ *  - program_studi / specialisasi / status_bekerja dari
  *    GET /api/olap/detail (view v_olap_detail, seluruh histori)
+ *  - kategori keselarasan dari kolom `hubungan_bidang` di
+ *    v_olap_detail digabung dengan kolom `kategori` di
+ *    GET /api/olap/keselarasan (view memakai kerangka CROSS JOIN
+ *    sehingga kategori bernilai 0 tetap dikirim, mis. "Tidak Selaras")
  *  - bidang_pekerjaan dari GET /api/alumni (dimensi alumni, butuh login)
  *
- * Opsi keselarasan sengaja dibaca dari dua kolom terpisah dan
- * digabung: dim_keselarasan menyimpan pasangan horizontal x
- * vertikal, jadi kedua kolom berisi himpunan nilai yang sama
- * ("Selaras" dan "Tidak Selaras"). Kalau tabel fakta masih kosong,
- * daftarnya ikut kosong dan formulir menampilkan pesan "opsi belum
- * tersedia" — nilai tidak pernah ditebak di frontend.
+ * Kalau tabel fakta masih kosong, daftarnya ikut kosong dan formulir
+ * menampilkan pesan "opsi belum tersedia" — nilai tidak pernah
+ * ditebak di frontend.
  */
 export async function getKuisionerOptions() {
-  const [detailRes, alumniRes] = await Promise.all([
+  const [detailRes, alumniRes, selarasRes] = await Promise.all([
     api.get('/olap/detail'),
     api.get('/alumni'),
+    api.get('/olap/keselarasan').catch(() => ({ data: null })),
   ]);
 
   const detailRows = Array.isArray(detailRes.data?.data) ? detailRes.data.data : [];
   const alumniRows = Array.isArray(alumniRes.data) ? alumniRes.data : [];
+  const selarasRows = Array.isArray(selarasRes.data?.data) ? selarasRes.data.data : [];
 
   const distinct = (values) => [...new Set(values.filter((v) => v != null && v !== ''))];
 
   const kategoriKeselarasan = distinct([
-    ...detailRows.map((r) => r.kategori_horizontal),
-    ...detailRows.map((r) => r.kategori_vertikal),
+    ...detailRows.map((r) => r.hubungan_bidang),
+    ...selarasRows.map((r) => r.kategori),
   ]).sort();
 
   return {

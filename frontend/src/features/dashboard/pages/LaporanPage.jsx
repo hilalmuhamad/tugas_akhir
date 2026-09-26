@@ -15,6 +15,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import CareerNavbar from '../../career/components/CareerNavbar';
+import Footer from '../../../components/Footer';
 import api from '../../../services/api';
 import { rekapPerProdi, laporanUnduhUrl } from '../utils/laporan';
 
@@ -261,6 +262,9 @@ export default function LaporanPage() {
           </>
         )}
       </main>
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 }

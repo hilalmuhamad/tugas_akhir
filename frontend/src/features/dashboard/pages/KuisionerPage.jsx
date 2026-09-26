@@ -5,6 +5,7 @@ import { useAuthStore } from '../../auth/store/authStore';
 import api from '../../../services/api';
 import { getKuisionerOptions } from '../services/tracerStudyApi';
 import AlumniNavbar from '../components/AlumniNavbar';
+import Footer from '../../../components/Footer';
 
 /*
  * Kuisioner API-driven: seluruh opsi isian (program studi, specialisasi,
@@ -19,8 +20,9 @@ import AlumniNavbar from '../components/AlumniNavbar';
  *  - status bekerja: hanya nilai yang benar-benar ada di PostgreSQL
  *    (saat ini "Bekerja" & "Tidak Bekerja"; "Wirausaha/Startup"
  *    dihilangkan karena tidak ada di data OLAP)
- *  - tingkatPendidikanSesuai: TIDAK dikirim/ditampilkan — kolomnya
- *    tidak ada di PostgreSQL (schema PG tidak mengikuti migration)
+ *  - kesesuaianBidang & tingkatPendidikanSesuai: opsi dari kolom
+ *    `hubungan_bidang` v_olap_detail + kolom `kategori`
+ *    /olap/keselarasan (keduanya "Selaras"/"Tidak Selaras")
  */
 
 const EMPTY_FORM = {
@@ -40,6 +42,7 @@ const EMPTY_FORM = {
   jabatan: '',
   bidangPekerjaan: '',
   kesesuaianBidang: '',
+  tingkatPendidikanSesuai: '',
 };
 
 export default function KuisionerPage() {
@@ -87,6 +90,7 @@ export default function KuisionerPage() {
             jabatan: data.jabatan ?? '',
             bidangPekerjaan: data.bidangPekerjaan ?? '',
             kesesuaianBidang: data.kesesuaianBidang ?? '',
+            tingkatPendidikanSesuai: data.tingkatPendidikanSesuai ?? '',
           });
         }
       } catch {
@@ -114,6 +118,7 @@ export default function KuisionerPage() {
         next.jabatan = '';
         next.bidangPekerjaan = '';
         next.kesesuaianBidang = '';
+        next.tingkatPendidikanSesuai = '';
       }
       return next;
     });
@@ -520,6 +525,7 @@ export default function KuisionerPage() {
           </>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

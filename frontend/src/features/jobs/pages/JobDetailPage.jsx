@@ -9,6 +9,7 @@ import {
   Globe,
 } from 'lucide-react';
 import CareerNavbar from '../../career/components/CareerNavbar';
+import Footer from '../../../components/Footer';
 import { fetchJobs } from '../services/jobApi';
 
 function portalSearch(title, location) {
@@ -174,6 +175,7 @@ export default function JobDetailPage() {
           </article>
         )}
       </main>
+      <Footer />
     </div>
   );
 }

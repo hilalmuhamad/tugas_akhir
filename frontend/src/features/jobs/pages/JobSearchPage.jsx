@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Search, MapPin, Building2, ExternalLink, Filter } from 'lucide-react';
 import CareerNavbar from '../../career/components/CareerNavbar';
+import Footer from '../../../components/Footer';
 import { fetchJobs, fetchRegions, searchJobs } from '../services/jobApi';
 import { getAnalysis, getHistory } from '../../career/services/careerApi';
 
@@ -298,6 +299,7 @@ export default function JobSearchPage() {
           })}
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
