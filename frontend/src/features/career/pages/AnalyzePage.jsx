@@ -39,12 +39,21 @@ export default function AnalyzePage() {
       .catch(() => setHistory([]));
   }, []);
 
+  const normalizeLinkedinUrl = (raw) => {
+    const v = (raw || '').trim();
+    if (!v) return '';
+    if (/^https?:\/\//i.test(v)) return v;
+    return `https://${v}`;
+  };
+
   const handleLinkedinScrape = async () => {
-    if (!linkedinUrl) return;
+    const url = normalizeLinkedinUrl(linkedinUrl);
+    if (!url) return;
+    if (url !== linkedinUrl) setLinkedinUrl(url);
     setLinkedinLoading(true);
     setLinkedinMsg(null);
     try {
-      const { data } = await scrapeLinkedin(linkedinUrl);
+      const { data } = await scrapeLinkedin(url);
       if (data.success && data.text) {
         // Isi otomatis profileText dengan hasil scrape + beri tahu user
         setProfileText((prev) => {
@@ -63,8 +72,10 @@ export default function AnalyzePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const url = normalizeLinkedinUrl(linkedinUrl);
+    if (url !== linkedinUrl) setLinkedinUrl(url);
     const result = await analyze({
-      linkedin_url: linkedinUrl || null,
+      linkedin_url: url || null,
       profile_text: profileText,
     });
     if (result.ok) {
