@@ -31,6 +31,18 @@ class ItKeywordFilter
         'system administrator',
     ];
 
+    /**
+     * Kata peran non-IT: jika muncul di JUDUL, langsung ditolak walau
+     * tag-nya mengandung kata teknologi ("review aplikasi Android/iOS",
+     * "mobile marketing", dsb). Dicek SEBELUM allowlist.
+     */
+    private const DENY_TITLE_TOKENS = [
+        'marketing', 'sales', 'writer', 'copywriter', 'reviewer',
+        'assistant', 'driver', 'notaris', 'legal', 'hospitality',
+        'neurologist', 'medical', 'nurse', 'teacher', 'general manager',
+        'accounting', 'accountant', 'host live', 'sosmed',
+    ];
+
     /** Token skill/teknologi untuk penilaian gabungan. */
     private const SKILL_TOKENS = [
         'react', 'vue', 'angular', 'laravel', 'php', 'python', 'java',
@@ -42,11 +54,22 @@ class ItKeywordFilter
     ];
 
     /**
+     * Hanya sinyal dari JUDUL + TAG keahlian yang dihitung — deskripsi
+     * sengaja diabaikan karena kata teknologi sering disebut insidental
+     * di lowongan non-IT ("mobile-friendly content", "review aplikasi
+     * Android/iOS", "update frontend website" untuk admin sosmed, dsb).
+     * Deskripsi tetap disimpan dan dipakai TF-IDF untuk perangkingan.
+     *
      * @param array{judul_posisi:string, deskripsi:string, keahlian:array} $job
      */
     public static function isItJob(array $job): bool
     {
         $judul = mb_strtolower((string) ($job['judul_posisi'] ?? ''));
+        foreach (self::DENY_TITLE_TOKENS as $token) {
+            if (str_contains($judul, $token)) {
+                return false;
+            }
+        }
         foreach (self::STRONG_TITLE_TOKENS as $token) {
             if (str_contains($judul, $token)) {
                 return true;
@@ -55,7 +78,6 @@ class ItKeywordFilter
 
         $gabungan = mb_strtolower(
             ($job['judul_posisi'] ?? '').' '.
-            ($job['deskripsi'] ?? '').' '.
             implode(' ', (array) ($job['keahlian'] ?? []))
         );
         $cocok = 0;
