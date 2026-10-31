@@ -63,7 +63,7 @@ class AuthController extends Controller
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users', 'email')->ignore($user->id),
+                Rule::unique('pgsql_oltp.users', 'email')->ignore($user->id),
             ],
             'phone' => ['nullable', 'string', 'max:25'],
             'avatar' => ['nullable', 'image', 'max:2048'],
@@ -177,20 +177,31 @@ class AuthController extends Controller
         }
         $isAdmin = $user !== null && $user->role === 'admin';
 
+        $messages = [
+            'name.required' => 'Nama wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar. Silakan masuk atau gunakan email lain.',
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'role.in' => 'Peran tidak valid.',
+        ];
+
         if (! $isAdmin) {
             $validated = $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'email', 'unique:users,email'],
+                'email' => ['required', 'email', 'unique:pgsql_oltp.users,email'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
+            ], $messages);
             $validated['role'] = 'alumni';
         } else {
             $validated = $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'email', 'unique:users,email'],
+                'email' => ['required', 'email', 'unique:pgsql_oltp.users,email'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'role' => ['required', 'string', 'in:admin,alumni,viewer'],
-            ]);
+            ], $messages);
         }
 
         $user = User::create([

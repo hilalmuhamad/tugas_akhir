@@ -8,21 +8,23 @@ use App\Models\CareerChatMessage;
 use App\Models\FactTracerAlumni;
 use App\Models\Lowongan;
 use App\Services\AiService;
+use App\Services\JobMatcherService;
 use App\Services\LinkedInService;
-use App\Services\TfIdfService;
+use App\Services\ProfileAnalyzerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
 
 class CareerController extends Controller
 {
     public function __construct(
         private readonly AiService $ai,
-        private readonly TfIdfService $tfidf,
         private readonly LinkedInService $linkedin,
-    ) {
-    }
+        private readonly ProfileAnalyzerService $analyzer,
+        private readonly JobMatcherService $matcher,
+    ) {}
 
     /**
      * POST /api/career/analyze
@@ -39,10 +41,10 @@ class CareerController extends Controller
         // Jika ada linkedin_url, coba scrape deskripsi publik untuk memperkaya konteks LLM
         $scraped = null;
         $scrapeNote = '';
-        if (!empty($validated['linkedin_url'])) {
+        if (! empty($validated['linkedin_url'])) {
             $scraped = $this->linkedin->scrape($validated['linkedin_url']);
             if ($scraped) {
-                $scrapeNote = "\n\n[Deskripsi LinkedIn ter-scrape otomatis (".mb_strlen($scraped)." karakter) — gunakan sebagai konteks tambahan]";
+                $scrapeNote = "\n\n[Deskripsi LinkedIn ter-scrape otomatis (".mb_strlen($scraped).' karakter) — gunakan sebagai konteks tambahan]';
             } else {
                 $scrapeNote = "\n\n[Catatan: Deskripsi LinkedIn tidak dapat di-scrape otomatis (halaman login/privat). Analisis mengandalkan teks paste manual.]";
             }
@@ -51,7 +53,7 @@ class CareerController extends Controller
         // Gabungkan profile_text + hasil scrape untuk LLM
         $profileForLlm = $validated['profile_text'];
         if ($scraped) {
-            $profileForLlm .= "\n\n--- Deskripsi LinkedIn (scrape) ---\n" . mb_substr($scraped, 0, 4000);
+            $profileForLlm .= "\n\n--- Deskripsi LinkedIn (scrape) ---\n".mb_substr($scraped, 0, 4000);
         }
 
         // Validasi panjang gabungan minimal 80 char
@@ -66,7 +68,7 @@ class CareerController extends Controller
             ],
             [
                 'role' => 'user',
-                'content' => "Link profil LinkedIn: ".($validated['linkedin_url'] ?? '-').$scrapeNote."\n\nTeks profil kandidat (paste + scrape):\n".$profileForLlm,
+                'content' => 'Link profil LinkedIn: '.($validated['linkedin_url'] ?? '-').$scrapeNote."\n\nTeks profil kandidat (paste + scrape):\n".$profileForLlm,
             ],
         ];
 
@@ -74,11 +76,11 @@ class CareerController extends Controller
             $raw = $this->ai->chat($messages, temperature: 0.4);
             $analysis = $this->parseJson($raw);
         } catch (RuntimeException $e) {
-            // Fallback tanpa LLM (9-router key belum valid / 401) — tetap beri analisis deterministik via TF-IDF
-            // agar fitur kesesuaian bidang tetap bisa dicoba (mis. IT Backend → % kecocokan backend)
-            \Illuminate\Support\Facades\Log::warning('AI analyze fallback: '.$e->getMessage());
+            Log::warning('AI analyze fallback: '.$e->getMessage());
             $analysis = $this->fallbackAnalysis($validated['profile_text'], $validated['linkedin_url'] ?? null);
         }
+
+        $analysis = $this->lengkapiAnalisis($analysis, $profileForLlm);
 
         $record = CareerAnalysis::create([
             'user_id' => $request->user()->id,
@@ -92,7 +94,7 @@ class CareerController extends Controller
             'user_id' => $request->user()->id,
             'role' => 'assistant',
             'content' => "Halo {$this->namaDariAnalisis($analysis)}! Saya sudah menganalisis latar belakang Anda dan menemukan "
-                .count($analysis['rekomendasi'] ?? [])." pekerjaan yang cocok. Tanyakan apa saja seputar karier Anda, "
+                .count($analysis['rekomendasi'] ?? []).' pekerjaan yang cocok. Tanyakan apa saja seputar karier Anda, '
                 .'misalnya "Posisi mana yang paling cocok untuk saya?" atau "Berapa gaji yang wajar?"',
         ]);
 
@@ -179,10 +181,18 @@ class CareerController extends Controller
         try {
             $reply = $this->ai->chat($messages, temperature: 0.7);
         } catch (RuntimeException $e) {
-            \Illuminate\Support\Facades\Log::warning('AI chat fallback: '.$e->getMessage());
+            Log::warning('AI chat fallback: '.$e->getMessage());
             $fallback = $this->rekomendasiLowongan($analysis->analysis ?? [], $lintasanPesan);
-            $pct = $fallback[0]['kecocokan'] ?? 85;
-            $reply = "Maaf, server AI 9-router sedang tidak merespons (key 401). Saya tetap bisa bantu via pencocokan TF-IDF di kartu lowongan di bawah — mis. profil backend Anda cocok {$pct}% ke posisi Backend. Coba tanyakan: 'skill apa yang perlu ditingkatkan untuk backend?'";
+            if (! empty($fallback)) {
+                $teratas = $fallback[0];
+                $reply = 'Berdasarkan pencocokan profil Anda, lowongan yang paling relevan saat ini adalah '
+                    .$teratas['judul_posisi'].' di '.$teratas['perusahaan']
+                    .' dengan kecocokan '.$teratas['kecocokan'].'%. '
+                    .'Lihat kartu lowongan di bawah untuk detail dan skill yang perlu ditingkatkan.';
+            } else {
+                $reply = 'Saat ini belum ada lowongan aktif yang cukup dekat dengan profil Anda. '
+                    .'Coba lengkapi skill utama atau perluas preferensi lokasi, lalu kirim ulang pertanyaan.';
+            }
         }
 
         $assistantMessage = CareerChatMessage::create([
@@ -348,42 +358,20 @@ class CareerController extends Controller
      */
     private function rekomendasiLowongan(array $analysis, ?string $lokasiFokus = null): array
     {
-        $profil = collect([
-            $analysis['ringkasan'] ?? null,
-            collect($analysis['pengalaman'] ?? [])->implode(' '),
-            collect($analysis['pendidikan'] ?? [])->implode(' '),
-            collect($analysis['skill'] ?? [])->implode(' '),
-        ])->filter()->implode(' ');
-
-        if (trim($profil) === '') {
-            return [];
-        }
-
-        $query = Lowongan::where('aktif', true);
-        if ($lokasiFokus !== null && $lokasiFokus !== '') {
-            $query->where('lokasi', 'like', '%'.$lokasiFokus.'%');
-        }
-        $lowongan = $query->get();
+        $lowongan = Lowongan::where('aktif', true)->get();
         if ($lowongan->isEmpty()) {
             return [];
         }
 
-        $peringkat = $this->tfidf->cari($profil, $lowongan->map(fn (Lowongan $job) => [
-            'id' => $job->id,
-            'teks' => $job->dokumen(),
-        ])->all());
-
-        // Skor kosinus TF-IDF asli kecil; tampilkan sebagai persentase relatif
-        // 40-100 (lowongan paling cocok = 100) agar mudah dipahami user.
-        $qualified = collect($peringkat)->filter(fn (array $item) => $item['skor'] > 0);
-        $minSkor = $qualified->min('skor') ?? 0;
-        $maxSkor = $qualified->max('skor') ?? 0;
+        $hasil = $this->matcher->match($analysis, $lowongan, null, $lokasiFokus, 5);
+        if ($hasil['abstain'] || empty($hasil['hasil'])) {
+            return [];
+        }
 
         $frontend = $this->frontendUrl();
 
-        return $qualified
-            ->take(5)
-            ->map(function (array $item) use ($lowongan, $frontend, $minSkor, $maxSkor) {
+        return collect($hasil['hasil'])
+            ->map(function (array $item) use ($lowongan, $frontend) {
                 $job = $lowongan->firstWhere('id', $item['id']);
                 if ($job === null) {
                     return null;
@@ -402,7 +390,12 @@ class CareerController extends Controller
                     'gaji' => $gaji,
                     'keahlian' => $job->keahlian ?? [],
                     'skor' => $item['skor'],
-                    'kecocokan' => $this->kecocokanPersen($item['skor'], $minSkor, $maxSkor),
+                    'kecocokan' => $item['kecocokan'],
+                    'level_posisi' => $item['level_posisi'],
+                    'skill_cocok' => $item['skill_cocok'],
+                    'skill_kurang' => $item['skill_kurang'],
+                    'alasan' => $item['alasan'],
+                    'metode' => $item['metode'],
                     'sumber_url' => $job->sumber_url,
                     'link' => $job->sumber_url ?: "{$frontend}/jobs/{$job->id}",
                     'terbuka' => ! empty($job->sumber_url),
@@ -430,21 +423,6 @@ class CareerController extends Controller
         }
 
         return null;
-    }
-
-    /**
-     * Konversi skor kosinus TF-IDF menjadi persentase relatif (40..100).
-     */
-    private function kecocokanPersen(float $skor, float $minSkor, float $maxSkor): int
-    {
-        if ($skor <= 0) {
-            return 0;
-        }
-        if ($maxSkor <= $minSkor) {
-            return 100;
-        }
-
-        return (int) round(40 + (($skor - $minSkor) / ($maxSkor - $minSkor)) * 60);
     }
 
     private function analysisSystemPrompt(): string
@@ -538,59 +516,99 @@ PROMPT;
     }
 
     /**
-     * Fallback analisis tanpa LLM (saat 9-router key 401 / timeout).
-     * Ekstrak skill sederhana + rekomendasi via TF-IDF deterministik agar % kecocokan tetap muncul.
+     * Fallback analisis tanpa LLM: ekstraksi deterministik dari teks profil.
      */
     private function fallbackAnalysis(string $profileText, ?string $linkedinUrl): array
     {
-        $lower = mb_strtolower($profileText);
-        // Ekstrak skill keyword
-        $skillKeywords = ['laravel','react','php','javascript','postgresql','mysql','python','java','network','vlan','qos','full-stack','backend','frontend','database','api','infrastructure'];
-        $skill = [];
-        foreach ($skillKeywords as $kw) if (str_contains($lower, $kw)) $skill[] = $kw;
-        if (empty($skill)) $skill = ['backend','full-stack'];
+        $analysis = $this->analyzer->analyze($profileText);
+        $analysis['linkedin_url'] = $linkedinUrl;
 
-        // Rekomendasi TF-IDF deterministik (ambil 3 teratas)
-        $profilForTfidf = $profileText;
         $lowongan = Lowongan::where('aktif', true)->get();
-        $peringkat = [];
-        if ($lowongan->isNotEmpty()) {
-            $peringkat = $this->tfidf->cari($profilForTfidf, $lowongan->map(fn($j)=>['id'=>$j->id,'teks'=>$j->dokumen()])->all());
-            $peringkat = collect($peringkat)->filter(fn($x)=>$x['skor']>0)->take(3)->values()->all();
-        }
+        $hasil = $this->matcher->match($analysis, $lowongan, null, null, 3);
+        $frontend = $this->frontendUrl();
+
         $rekomendasi = [];
-        $min = collect($peringkat)->min('skor') ?? 0;
-        $max = collect($peringkat)->max('skor') ?? 0;
-        foreach ($peringkat as $p) {
-            $job = $lowongan->firstWhere('id',$p['id']);
-            if (!$job) continue;
-            $kecocokan = $this->kecocokanPersen($p['skor'], $min, $max);
-            // Jika profil berat backend, boost backend jobs
-            if (str_contains($lower,'backend') && str_contains(mb_strtolower($job->judul_posisi),'backend')) $kecocokan = min(100, $kecocokan+10);
+        foreach ($hasil['hasil'] as $item) {
+            $job = $lowongan->firstWhere('id', $item['id']);
+            if ($job === null) {
+                continue;
+            }
+
+            $gaji = null;
+            if ($job->gaji_min !== null || $job->gaji_max !== null) {
+                $gaji = ($job->gaji_min ?? 0).'-'.($job->gaji_max ?? '?').' jt';
+            }
+
             $rekomendasi[] = [
                 'posisi' => $job->judul_posisi,
-                'kecocokan' => $kecocokan,
-                'alasan' => 'Kecocokan dihitung TF-IDF dari deskripsi LinkedIn Anda terhadap lowongan (tanpa LLM). Skor '.$kecocokan.'% — backend heavy terdeteksi.',
-                'gaji_estimasi' => ($job->gaji_min ?? 5).'-'.($job->gaji_max ?? 10).' jt',
-                'prospek' => 'Prospek baik, tingkatkan skill terkait.',
-                'link' => $job->sumber_url ?: env('FRONTEND_URL','http://localhost:5173').'/jobs/'.$job->id,
+                'perusahaan' => $job->perusahaan,
+                'kecocokan' => $item['kecocokan'],
+                'alasan' => $item['alasan'],
+                'level_posisi' => $item['level_posisi'],
+                'skill_cocok' => $item['skill_cocok'],
+                'skill_kurang' => $item['skill_kurang'],
+                'gaji_estimasi' => $gaji,
+                'prospek' => 'Relevan dengan bidang '.implode(' dan ', $analysis['domain']).'; kompetisi bergantung pada portofolio dan pengalaman.',
+                'link' => $job->sumber_url ?: "{$frontend}/jobs/{$job->id}",
             ];
         }
+
+        $analysis['rekomendasi'] = $rekomendasi;
+        $analysis['gap_skill'] = $hasil['gap_skill'];
         if (empty($rekomendasi)) {
-            $rekomendasi[] = ['posisi'=>'Backend Developer','kecocokan'=>85,'alasan'=>'Profil berat IT Backend terdeteksi dari deskripsi LinkedIn','gaji_estimasi'=>'8-12 jt','prospek'=>'Tinggi','link'=>null];
+            $analysis['catatan'] = $hasil['pesan'];
         }
 
-        return [
-            'nama' => 'Kandidat',
-            'ringkasan' => mb_substr($profileText,0,200).'... (analisis fallback tanpa LLM — 9-router key belum valid, TF-IDF tetap jalan)',
-            'program_studi' => str_contains($lower,'informatika') ? 'Teknik Informatika' : 'Umum',
-            'skill' => $skill,
-            'pengalaman' => ['IT Intern BLSDM Komdigi — network & full-stack'],
-            'pendidikan' => ['Informatics Engineering'],
-            'rekomendasi' => $rekomendasi,
-            'gap_skill' => ['Docker','CI/CD','System Design'],
-            'linkedin_url' => $linkedinUrl,
-            'mode' => 'fallback-tfidf',
-        ];
+        return $analysis;
+    }
+
+    /**
+     * Pastikan field deterministik (level, domain, tahun, skill kanonik) selalu
+     * tersedia dan konsisten, baik hasil LLM maupun fallback.
+     */
+    private function lengkapiAnalisis(array $analysis, string $profileText): array
+    {
+        $det = $this->analyzer->analyze($profileText);
+
+        foreach (['nama', 'headline', 'ringkasan', 'program_studi', 'pengalaman', 'pendidikan', 'kekuatan'] as $key) {
+            $nilai = $analysis[$key] ?? null;
+            $kosong = is_array($nilai) ? empty($nilai) : trim((string) $nilai) === '';
+            if ($kosong) {
+                $analysis[$key] = $det[$key];
+            }
+        }
+
+        if (($analysis['program_studi'] ?? 'Umum') === 'Umum' && $det['program_studi'] !== 'Umum') {
+            $analysis['program_studi'] = $det['program_studi'];
+        }
+
+        if (in_array(mb_strtolower(trim((string) ($analysis['nama'] ?? ''))), ['kandidat', 'candidate', '-', ''], true)
+            && $det['nama'] !== 'Kandidat') {
+            $analysis['nama'] = $det['nama'];
+        }
+
+        $analysis['level_karier'] = $det['level_karier'];
+        $analysis['pengalaman_tahun'] = $det['pengalaman_tahun'];
+        $analysis['domain'] = $det['domain'];
+        $analysis['skill_utama'] = $det['skill_utama'];
+        $analysis['skill_pendukung'] = $det['skill_pendukung'];
+        $analysis['soft_skill'] = $det['soft_skill'];
+
+        $skillLlm = $this->analyzer->kanonikDaftar(
+            is_array($analysis['skill'] ?? null) ? $analysis['skill'] : []
+        );
+        $analysis['skill'] = array_values(array_unique(array_merge($det['skill'], $skillLlm)));
+
+        if (empty($analysis['mode'])) {
+            $analysis['mode'] = 'llm+deterministik';
+        }
+
+        if (empty($analysis['gap_skill'])) {
+            $lowongan = Lowongan::where('aktif', true)->get();
+            $hasil = $this->matcher->match($analysis, $lowongan, null, null, 5);
+            $analysis['gap_skill'] = $hasil['gap_skill'];
+        }
+
+        return $analysis;
     }
 }

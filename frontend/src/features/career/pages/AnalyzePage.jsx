@@ -15,7 +15,7 @@ const STEPS = [
   {
     number: '2',
     title: 'AI Menilai Kecocokan',
-    desc: 'Profil Anda dibandingkan dengan data tracer alumni kampus untuk menentukan posisi paling cocok.',
+    desc: 'Profil dibandingkan dengan lowongan aktif memakai TF-IDF + cosine similarity, dengan penyesuaian bidang dan level karier.',
   },
   {
     number: '3',
@@ -108,7 +108,7 @@ export default function AnalyzePage() {
             <form className="mt-5 space-y-5" onSubmit={handleSubmit}>
               <label className="block">
                 <span className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Link LinkedIn <span className="text-slate-400">(opsional — via OpenRouter 9-router DeepSeek)</span>
+                  Link LinkedIn <span className="text-slate-400">(opsional)</span>
                 </span>
                 <div className="flex gap-2">
                   <input
@@ -129,12 +129,12 @@ export default function AnalyzePage() {
                   </button>
                 </div>
                 {linkedinMsg && <p className="mt-1.5 text-xs text-slate-500">{linkedinMsg}</p>}
-                <p className="mt-1 text-xs text-slate-400">Jika link privat, tempel manual isi profil di bawah. Deskripsi berat IT Backend akan otomatis menunjukkan % kecocokan ke lowongan Backend.</p>
+                <p className="mt-1 text-xs text-slate-400">Jika link privat, tempel manual isi profil di bawah. Profil akan dicocokkan otomatis dengan lowongan aktif berdasarkan skill, bidang, dan level karier.</p>
               </label>
 
               <label className="block">
                 <span className="mb-1.5 block text-sm font-medium text-slate-700">
-                  Isi Profil LinkedIn <span className="text-red-500">*</span> <span className="text-slate-400 text-xs">(akan dicocokkan TF-IDF ke lowongan — mis. backend → % kecocokan backend)</span>
+                  Isi Profil LinkedIn <span className="text-red-500">*</span> <span className="text-slate-400 text-xs">(dicocokkan dengan lowongan via TF-IDF)</span>
                 </span>
                 <textarea
                   value={profileText}
@@ -146,7 +146,7 @@ export default function AnalyzePage() {
                   className="w-full resize-y rounded-xl border border-slate-200 px-4 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                 />
                 <span className="mt-1 block text-xs text-slate-400">
-                  {profileText.length} karakter {linkedinUrl ? '(min 50 dengan link)' : '(min 100)'} — model OpenRouter DeepSeek via 9-router gateway akan analisis deskripsi berat IT Backend → % kecocokan
+                  {profileText.length} karakter {linkedinUrl ? '(min 50 dengan link)' : '(min 100)'} — profil dianalisis untuk menilai skill, bidang, dan level karier, lalu dicocokkan ke lowongan aktif
                 </span>
               </label>
 

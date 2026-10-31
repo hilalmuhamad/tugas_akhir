@@ -13,7 +13,7 @@ class Lowongan extends Model
         'gaji_min', 'gaji_max', 'deskripsi', 'keahlian',
         'sumber_url', 'terverifikasi_pada', 'aktif',
     ];
-
+    
     protected $casts = [
         'keahlian' => 'array',
         'aktif' => 'boolean',

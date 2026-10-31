@@ -12,7 +12,7 @@ export default function JobRecommendationCards({ jobs }) {
         <div>
           <h3 className="text-sm font-bold text-slate-800">💼 Lowongan yang cocok untuk profil Anda</h3>
           <p className="text-xs text-slate-500">
-            Direkomendasikan otomatis dari database lowongan berdasarkan hasil analisis.
+            Diurutkan dari kemiripan skill, bidang, dan kesesuaian level karier Anda.
           </p>
         </div>
         <Link
@@ -77,12 +77,42 @@ function Card({ job, index }) {
             <MapPin className="h-3.5 w-3.5" /> {job.lokasi}
           </span>
         )}
+        {job.level_posisi && job.level_posisi !== 'tidak disebutkan' && (
+          <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+            {job.level_posisi}
+          </span>
+        )}
         {job.gaji && (
           <span className="font-semibold text-slate-700">Rp {job.gaji} jt/bln</span>
         )}
       </div>
 
-      {job.keahlian?.length > 0 && (
+      {job.alasan && (
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-slate-500">{job.alasan}</p>
+      )}
+
+      {job.skill_cocok?.length > 0 && (
+        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+          {job.skill_cocok.slice(0, 4).map((skill) => (
+            <span
+              key={skill}
+              className="rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700"
+            >
+              {skill}
+            </span>
+          ))}
+          {job.skill_kurang?.slice(0, 2).map((skill) => (
+            <span
+              key={skill}
+              className="rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700"
+            >
+              perlu {skill}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {!job.skill_cocok?.length && job.keahlian?.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-1.5">
           {job.keahlian.slice(0, 3).map((skill) => (
             <span

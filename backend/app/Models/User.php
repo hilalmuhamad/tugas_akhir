@@ -13,6 +13,13 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
 
+    /**
+     * Akun adalah data operasional (OLTP), jadi wajib satu basis data dengan
+     * alumni_profiles, personal_access_tokens, career_analyses, dan search_logs.
+     * Sebelumnya User memakai koneksi default (tugasakhir) sehingga akun baru
+     * tidak pernah masuk ke tugasakhir_oltp dan simpan kuesioner gagal karena
+     * foreign key user_id tidak menemukan barisnya.
+     */
     protected $connection = 'pgsql_oltp';
 
     protected $fillable = [

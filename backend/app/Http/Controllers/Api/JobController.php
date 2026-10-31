@@ -5,16 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Lowongan;
 use App\Models\SearchLog;
+use App\Services\JobMatcherService;
 use App\Services\Jobs\JobScraperService;
-use App\Services\TfIdfService;
+use App\Services\ProfileAnalyzerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class JobController extends Controller
 {
-    public function __construct(private readonly TfIdfService $tfidf)
-    {
-    }
+    public function __construct(
+        private readonly ProfileAnalyzerService $analyzer,
+        private readonly JobMatcherService $matcher,
+    ) {}
 
     /**
      * GET /api/jobs
@@ -61,19 +64,8 @@ class JobController extends Controller
         $query = $validated['query'];
         $daerah = $validated['daerah'] ?? null;
 
-        $lowonganQuery = Lowongan::query()->where('aktif', true);
-        if ($daerah !== null && $daerah !== '') {
-            $lowonganQuery->where('lokasi', 'like', '%'.$daerah.'%');
-        }
-        $lowongan = $lowonganQuery->get();
+        $lowongan = Lowongan::query()->where('aktif', true)->get();
 
-        $dokumen = $lowongan->map(fn (Lowongan $job) => [
-            'id' => $job->id,
-            'teks' => $job->dokumen(),
-        ])->all();
-
-        // Query utama (60%) + teks profil kandidat (40%) untuk rekomendasi yang lebih spesifik
-        $kueri = [['teks' => $query, 'bobot' => 0.6]];
         $profil = $validated['profil'] ?? [];
         $teksProfil = trim(collect([
             $profil['pengalaman'] ?? [],
@@ -81,30 +73,25 @@ class JobController extends Controller
             $profil['keahlian'] ?? [],
         ])->flatten()->implode(' '));
 
-        if ($teksProfil !== '') {
-            $kueri[] = ['teks' => $teksProfil, 'bobot' => 0.4];
-        }
+        $analysis = $this->analyzer->analyze($teksProfil !== '' ? $teksProfil : $query);
+        $match = $this->matcher->match($analysis, $lowongan, $query, $daerah, 20);
 
-        $peringkat = $this->tfidf->skorKombinasi($kueri, $dokumen);
+        $hasil = collect($match['hasil'])->map(function (array $item) use ($lowongan) {
+            $job = $lowongan->firstWhere('id', $item['id']);
+            if ($job === null) {
+                return null;
+            }
 
-        // Normalisasi skor TF-IDF (nilai kosinus asli sangat kecil) menjadi
-        // persentase relatif 40-100 sehingga mudah dipahami pengguna:
-        // lowongan paling cocok = 100%, yang paling rendah pada hasil = ~40%.
-        $qualified = collect($peringkat)->filter(fn (array $item) => $item['skor'] > 0);
-        $minSkor = $qualified->min('skor') ?? 0;
-        $maxSkor = $qualified->max('skor') ?? 0;
-
-        $hasil = $qualified
-            ->take(20)
-            ->map(function (array $item) use ($lowongan, $minSkor, $maxSkor) {
-                $job = $lowongan->firstWhere('id', $item['id']);
-
-                return $this->bentuk($job)->merge([
-                    'skor' => $item['skor'],
-                    'kecocokan' => $this->kecocokanPersen($item['skor'], $minSkor, $maxSkor),
-                ]);
-            })
-            ->values();
+            return $this->bentuk($job)->merge([
+                'skor' => $item['skor'],
+                'kecocokan' => $item['kecocokan'],
+                'level_posisi' => $item['level_posisi'],
+                'skill_cocok' => $item['skill_cocok'],
+                'skill_kurang' => $item['skill_kurang'],
+                'alasan' => $item['alasan'],
+                'metode' => $item['metode'],
+            ]);
+        })->filter()->values();
 
         SearchLog::create([
             'user_id' => $request->user()?->id,
@@ -117,7 +104,10 @@ class JobController extends Controller
             'query' => $query,
             'daerah' => $daerah,
             'profil_digunakan' => $teksProfil !== '',
-            'metode' => 'tf-idf + cosine similarity (dengan profil kandidat bila tersedia)',
+            'metode' => 'tf-idf + cosine similarity + kelayakan level (skor absolut terkalibrasi)',
+            'abstain' => $match['abstain'],
+            'pesan' => $match['pesan'],
+            'gap_skill' => $match['gap_skill'],
             'total_korpus' => $lowongan->count(),
             'hasil' => $hasil,
         ]);
@@ -173,25 +163,25 @@ class JobController extends Controller
 
         $validated = $request->validate([
             'judul_posisi' => ['required', 'string', 'max:255'],
-            'perusahaan'   => ['required', 'string', 'max:255'],
-            'lokasi'       => ['nullable', 'string', 'max:255'],
-            'gaji_min'     => ['nullable', 'numeric', 'min:0'],
-            'gaji_max'     => ['nullable', 'numeric', 'min:0'],
-            'deskripsi'    => ['nullable', 'string', 'max:2000'],
-            'keahlian'     => ['nullable', 'array'],
-            'keahlian.*'   => ['string', 'max:255'],
-            'sumber_url'   => ['nullable', 'url', 'max:500'],
+            'perusahaan' => ['required', 'string', 'max:255'],
+            'lokasi' => ['nullable', 'string', 'max:255'],
+            'gaji_min' => ['nullable', 'numeric', 'min:0'],
+            'gaji_max' => ['nullable', 'numeric', 'min:0'],
+            'deskripsi' => ['nullable', 'string', 'max:2000'],
+            'keahlian' => ['nullable', 'array'],
+            'keahlian.*' => ['string', 'max:255'],
+            'sumber_url' => ['nullable', 'url', 'max:500'],
         ]);
 
         $job = Lowongan::create([
-            'judul_posisi'       => $validated['judul_posisi'],
-            'perusahaan'         => $validated['perusahaan'],
-            'lokasi'             => $validated['lokasi'] ?? null,
-            'gaji_min'           => $validated['gaji_min'] ?? null,
-            'gaji_max'           => $validated['gaji_max'] ?? null,
-            'deskripsi'          => $validated['deskripsi'] ?? '',
-            'keahlian'           => $validated['keahlian'] ?? [],
-            'sumber_url'         => $validated['sumber_url'] ?? null,
+            'judul_posisi' => $validated['judul_posisi'],
+            'perusahaan' => $validated['perusahaan'],
+            'lokasi' => $validated['lokasi'] ?? null,
+            'gaji_min' => $validated['gaji_min'] ?? null,
+            'gaji_max' => $validated['gaji_max'] ?? null,
+            'deskripsi' => $validated['deskripsi'] ?? '',
+            'keahlian' => $validated['keahlian'] ?? [],
+            'sumber_url' => $validated['sumber_url'] ?? null,
             'terverifikasi_pada' => now(),
         ]);
 
@@ -257,7 +247,7 @@ class JobController extends Controller
         ]);
     }
 
-    private function bentuk(Lowongan $job): \Illuminate\Support\Collection
+    private function bentuk(Lowongan $job): Collection
     {
         return collect([
             'id' => $job->id,
@@ -272,22 +262,6 @@ class JobController extends Controller
             'terbuka' => ! empty($job->sumber_url),
             'aktif' => $job->aktif,
         ]);
-    }
-
-    /**
-     * Konversi skor kemiripan TF-IDF (0..~1) menjadi persentase relatif
-     * terhadap rentang skor pada hasil pencarian (40..100).
-     */
-    private function kecocokanPersen(float $skor, float $minSkor, float $maxSkor): int
-    {
-        if ($skor <= 0) {
-            return 0;
-        }
-        if ($maxSkor <= $minSkor) {
-            return 100;
-        }
-
-        return (int) round(40 + (($skor - $minSkor) / ($maxSkor - $minSkor)) * 60);
     }
 
     private function deteksiKategori(string $query): string

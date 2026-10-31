@@ -79,6 +79,9 @@ export default function JobSearchPage() {
         metode: data.metode,
         total: data.total_korpus,
         profilDigunakan: data.profil_digunakan,
+        abstain: data.abstain,
+        pesan: data.pesan,
+        gap: data.gap_skill || [],
       });
     } catch (err) {
       setError(err.response?.data?.message || 'Pencarian gagal. Coba lagi.');
@@ -184,12 +187,32 @@ export default function JobSearchPage() {
         </form>
 
         {meta && (
-          <p className="mt-3 text-center text-xs text-slate-400">
-            Pencarian: "{meta.query}"
-            {meta.daerah ? ` — daerah: ${meta.daerah}` : ''} —{' '}
-            {meta.profilDigunakan ? 'profil LinkedIn ikut dipertimbangkan, ' : ''}
-            {jobs.length} hasil teratas dari {meta.total} lowongan
-          </p>
+          <div className="mt-3 text-center">
+            <p className="text-xs text-slate-400">
+              Pencarian: "{meta.query}"
+              {meta.daerah ? ` — daerah: ${meta.daerah}` : ''} —{' '}
+              {meta.profilDigunakan ? 'profil LinkedIn ikut dipertimbangkan, ' : ''}
+              {jobs.length} hasil teratas dari {meta.total} lowongan
+            </p>
+            {meta.pesan && (
+              <p className="mx-auto mt-2 max-w-2xl rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                {meta.pesan}
+              </p>
+            )}
+            {meta.gap?.length > 0 && (
+              <div className="mt-2 flex flex-wrap items-center justify-center gap-1.5">
+                <span className="text-xs text-slate-500">Skill yang perlu ditingkatkan:</span>
+                {meta.gap.map((g) => (
+                  <span
+                    key={g}
+                    className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         )}
 
         {error && (
@@ -203,7 +226,7 @@ export default function JobSearchPage() {
 
           {!loading && jobs.length === 0 && (
             <p className="py-10 text-center text-sm text-slate-400">
-              Belum ada lowongan yang cocok. Coba kata kunci lain atau ubah filter daerah.
+              {meta?.pesan || 'Belum ada lowongan yang cocok. Coba kata kunci lain atau ubah filter daerah.'}
             </p>
           )}
 
@@ -218,8 +241,13 @@ export default function JobSearchPage() {
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <h2 className="font-semibold text-slate-900">{job.judul_posisi}</h2>
+                      {job.level_posisi && job.level_posisi !== 'tidak disebutkan' && (
+                        <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-semibold text-violet-700">
+                          {job.level_posisi}
+                        </span>
+                      )}
                       {job.status_aktif === false ? (
                         <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">
                           Nonaktif
@@ -276,6 +304,31 @@ export default function JobSearchPage() {
                       </span>
                     ))}
                   </div>
+                )}
+
+                {(job.skill_cocok?.length > 0 || job.skill_kurang?.length > 0) && (
+                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                    {job.skill_cocok?.slice(0, 5).map((k) => (
+                      <span
+                        key={`cocok-${k}`}
+                        className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-700"
+                      >
+                        {k}
+                      </span>
+                    ))}
+                    {job.skill_kurang?.slice(0, 4).map((k) => (
+                      <span
+                        key={`kurang-${k}`}
+                        className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-medium text-amber-700"
+                      >
+                        perlu {k}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {job.alasan && (
+                  <p className="mt-2 text-xs leading-relaxed text-slate-500">{job.alasan}</p>
                 )}
 
                 {job.deskripsi && (

@@ -28,10 +28,12 @@ export default function RegisterForm() {
     } catch (error) {
       const errors = error.response?.data?.errors;
       const first = errors ? Object.values(errors)[0]?.[0] : null;
-      setMessage({
-        type: 'error',
-        text: first || error.response?.data?.message || 'Pendaftaran gagal.',
-      });
+      const text = first
+        || error.response?.data?.message
+        || (error.response
+          ? 'Pendaftaran gagal. Silakan coba lagi.'
+          : 'Tidak dapat terhubung ke server. Pastikan backend Laravel sudah berjalan.');
+      setMessage({ type: 'error', text });
     } finally {
       setLoading(false);
     }
